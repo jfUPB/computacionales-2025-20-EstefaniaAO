@@ -1,12 +1,12 @@
 # Unidad 1 ✅ Rúbrica
 
+# Nota de la unidad: set-seek * 0.4 + apply * 0.6 = 
+
 # Fase set seek
 
-## **Puntuación Final:** `[  ]` / 30
+## **Puntuación Final:** `[  ]` / 10
 
 ## Rúbrica de Evaluación: Arquitectura y Programación del Computador Hack
-
-**Objetivo:** Evaluar la comprensión de la arquitectura de un computador digital y la capacidad de programarlo en lenguaje ensamblador a través de la experimentación y el registro en una bitácora de aprendizaje.
 
 ### **Escala de Desempeño (basada en evidencia verificable)**
 
@@ -54,6 +54,13 @@ Evalúa la respuesta a estas preguntas y solicitudes: `Reporte del proceso de pr
 **Calificación Obtenida:** `[  ]` / 5
 
 ***
+
+# Fase apply
+
+## **Puntuación Final:** `[  ]` / 25
+
+## Rúbrica de Evaluación: Arquitectura y Programación del Computador Hack
+
 
 ### 3. Implementación de Control de Flujo con Saltos Condicionales (Actividad 03)
 
@@ -123,3 +130,17 @@ Evalúa la respuesta a estas preguntas y solicitudes: `Modificar el programa ant
 
 ***
 
+### 7. Implementación de Entrada/Salida Interactiva (Actividad "Entrada salida interactiva")
+
+Evalúa la respuesta a estas preguntas y solicitudes: `Programa funcional que mueve una línea horizontal con las teclas 'd' e 'i'. Reporte del proceso de desarrollo incremental con sus pruebas. Reporte de la simulación paso a paso (predice, ejecuta, observa, reflexiona). Reporte del programa final y su prueba.`
+
+| Nivel | Descripción del Desempeño |
+| :---: | :--- |
+| **5** | **Completo y Preciso:** La bitácora presenta un programa que mueve correctamente la línea a la izquierda y derecha según las teclas 'i' y 'd'. El programa contiene un bucle principal para leer el teclado y la lógica para actualizar la posición de la línea. Se incluye un reporte claro del desarrollo incremental (pasos y pruebas), un reporte de la simulación paso a paso, y el código final funcional. No hay omisiones. |
+| **4** | **Logrado:** El programa es completamente funcional, pero la bitácora presenta **una** de las siguientes omisiones menores: se omite el reporte del desarrollo incremental, o se omite el reporte de la simulación paso a paso. Todos los demás elementos son correctos y están presentes. |
+| **3** | **Suficiente:** Se presenta un programa que intenta la funcionalidad, pero solo funciona parcialmente (p. ej., mueve la línea en una sola dirección o no la borra al moverse). La bitácora omite más de uno de los reportes solicitados o estos son superficiales y no describen el proceso. |
+| **2** | **En Desarrollo:** El programa contiene la estructura de un bucle, pero no logra leer el teclado o modificar la posición de la línea de forma correcta. La lógica de interacción está ausente o es fundamentalmente incorrecta. Los reportes son inexistentes o no corresponden al problema. |
+| **1** | **Inicial:** Se entrega el código de la actividad anterior sin modificaciones significativas, o se presenta un código que no compila o no tiene relación con el control de entrada/salida para mover un objeto en pantalla. |
+| **0** | **No Realizado:** No se presenta evidencia de la actividad en la bitácora. |
+
+**Calificación Obtenida:** `[  ]` / 5
