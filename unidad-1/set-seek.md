@@ -233,7 +233,7 @@ Predicción: Salta incondicionalmente otra vez
 → Correcto.
 
 
-**Una instrucción que usa la ALU** sería `D=D-A`. En esa línea, la ALU toma los valores de los registros D y A, los resta, y guarda el resultado en D. Es una operación de tipo aritmético. También se usan comparaciones como `D;JLE`, que en el fondo también dependen de los resultados de la ALU para saber si se cumple una condición.
+**Una instrucción que usa la ALU** (Unidad Aritmético-Lógica, por sus siglas en inglés: Arithmetic Logic Unit) sería `D=D-A`. En esa línea, la ALU toma los valores de los registros D y A, los resta, y guarda el resultado en D. Es una operación de tipo aritmético. También se usan comparaciones como `D;JLE`, que en el fondo también dependen de los resultados de la ALU para saber si se cumple una condición.
 
 **El registro PC (Program Counter)** es el que indica qué instrucción se va a ejecutar en el siguiente ciclo. Va aumentando línea por línea, pero también puede saltar a otra posición si hay una instrucción de salto como `@LABEL` seguido de `JMP`.
 
