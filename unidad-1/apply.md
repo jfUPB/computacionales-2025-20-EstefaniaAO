@@ -226,7 +226,7 @@ D=D-A
 D;JLT
 ```
 **Predicción:** Si D < 0, salta a MENOR. Es decir, si RAM[5] < 10.  
-**Resultado:** Correcto — es una instrucción de salto condicional basada en el resultado de la ALU
+**Resultado:** Correcto, es una instrucción de salto condicional basada en el resultado de la ALU
 
 ```asm
 @7
@@ -346,14 +346,14 @@ D=A
 ```asm
 @i
 ```
-**Predicción:** A se carga con la dirección de la variable `i` (por ejemplo, RAM[16])  
+**Predicción:** A se carga con la dirección de la variable `i`
 **Resultado:** Correcto
 
 ```asm
 M=D
 ```
 **Predicción:** RAM[i] = 1  
-**Resultado:** Correcto — inicializa `i` en 1
+**Resultado:** Correcto (se inicializa `i` en 1)
 
 ```asm
 @0
@@ -377,7 +377,7 @@ D=A
 M=D
 ```
 **Predicción:** RAM[sum] = 0  
-**Resultado:** Correcto — inicializa `sum` en 0
+**Resultado:** Correcto (see inicializa `sum` en 0)
 
 ---
 
