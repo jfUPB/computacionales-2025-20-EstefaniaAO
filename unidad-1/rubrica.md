@@ -57,7 +57,7 @@ Evalúa la respuesta a estas preguntas y solicitudes: `Reporte del proceso de pr
 
 # Fase apply
 
-## **Puntuación Final:** `[  ]` / 25
+## **Puntuación Final:** `[  ]` / 10
 
 ## Rúbrica de Evaluación: Arquitectura y Programación del Computador Hack
 
@@ -96,51 +96,3 @@ Evalúa la respuesta a estas preguntas y solicitudes: `Crear un programa que use
 
 ***
 
-### 5. Interacción con Memoria de Video: Dibujar un Punto (Actividad 05)
-
-Evalúa la respuesta a estas preguntas y solicitudes: `Escribir un programa que dibuje un punto negro en la esquina superior izquierda de la pantalla. Reportar la simulación paso a paso.`
-
-| Nivel | Descripción del Desempeño |
-| :---: | :--- |
-| **5** | **Completo y Preciso:** La bitácora presenta un programa que calcula la dirección de memoria correcta para el pixel y le asigna el valor necesario para encenderlo. El resultado es un único punto en la esquina superior izquierda. Incluye un reporte del proceso de simulación. |
-| **4** | **Logrado:** El programa es funcionalmente correcto, pero se omite el reporte de la simulación. O bien, el reporte está presente, pero el programa tiene un error menor (p. ej., dibuja el punto en una ubicación ligeramente incorrecta pero cercana). |
-| **3** | **Suficiente:** El programa intenta acceder a la memoria de video, pero lo hace de forma incorrecta (p. ej., usa una dirección base errónea o no logra establecer el valor del pixel). El reporte de simulación es superficial o no se presenta. |
-| **2** | **En Desarrollo:** El código no demuestra una comprensión de cómo direccionar la memoria de video (SCREEN) o cómo manipular bits individuales dentro de un registro de memoria. |
-| **1** | **Inicial:** Se presenta un código que no tiene relación con el acceso a la memoria de video. |
-| **0** | **No Realizado:** No se presenta evidencia de la actividad en la bitácora. |
-
-**Calificación Obtenida:** `[  ]` / 5
-
-***
-
-### 6. Manipulación de Múltiples Píxeles: Dibujar una Línea (Actividad 06)
-
-Evalúa la respuesta a estas preguntas y solicitudes: `Modificar el programa anterior para dibujar una línea horizontal de 16 píxeles en la esquina superior izquierda. Reportar la simulación paso a paso.`
-
-| Nivel | Descripción del Desempeño |
-| :---: | :--- |
-| **5** | **Completo y Preciso:** La bitácora presenta un programa que direcciona correctamente el primer `word` de la memoria de pantalla y le asigna el valor que representa una línea horizontal de 16 píxeles (todos los bits a 1). Incluye un reporte del proceso de simulación. |
-| **4** | **Logrado:** El programa es funcionalmente correcto, pero se omite el reporte de la simulación. O bien, el reporte está presente, pero el programa tiene un error menor (p. ej., dibuja una línea pero en una fila incorrecta, o con un pixel apagado). |
-| **3** | **Suficiente:** El programa no asigna el valor correcto para crear una línea completa de 16 píxeles (p. ej., solo dibuja un punto o asigna un valor numérico incorrecto). El reporte de simulación es superficial o no se presenta. |
-| **2** | **En Desarrollo:** El código es una modificación incorrecta del ejercicio anterior que no logra el objetivo de dibujar una línea. No demuestra comprensión de que un `word` de memoria corresponde a 16 píxeles. |
-| **1** | **Inicial:** Se presenta el mismo código del ejercicio anterior sin ninguna modificación. |
-| **0** | **No Realizado:** No se presenta evidencia de la actividad en la bitácora. |
-
-**Calificación Obtenida:** `[  ]` / 5
-
-***
-
-### 7. Implementación de Entrada/Salida Interactiva (Actividad "Entrada salida interactiva")
-
-Evalúa la respuesta a estas preguntas y solicitudes: `Programa funcional que mueve una línea horizontal con las teclas 'd' e 'i'. Reporte del proceso de desarrollo incremental con sus pruebas. Reporte de la simulación paso a paso (predice, ejecuta, observa, reflexiona). Reporte del programa final y su prueba.`
-
-| Nivel | Descripción del Desempeño |
-| :---: | :--- |
-| **5** | **Completo y Preciso:** La bitácora presenta un programa que mueve correctamente la línea a la izquierda y derecha según las teclas 'i' y 'd'. El programa contiene un bucle principal para leer el teclado y la lógica para actualizar la posición de la línea. Se incluye un reporte claro del desarrollo incremental (pasos y pruebas), un reporte de la simulación paso a paso, y el código final funcional. No hay omisiones. |
-| **4** | **Logrado:** El programa es completamente funcional, pero la bitácora presenta **una** de las siguientes omisiones menores: se omite el reporte del desarrollo incremental, o se omite el reporte de la simulación paso a paso. Todos los demás elementos son correctos y están presentes. |
-| **3** | **Suficiente:** Se presenta un programa que intenta la funcionalidad, pero solo funciona parcialmente (p. ej., mueve la línea en una sola dirección o no la borra al moverse). La bitácora omite más de uno de los reportes solicitados o estos son superficiales y no describen el proceso. |
-| **2** | **En Desarrollo:** El programa contiene la estructura de un bucle, pero no logra leer el teclado o modificar la posición de la línea de forma correcta. La lógica de interacción está ausente o es fundamentalmente incorrecta. Los reportes son inexistentes o no corresponden al problema. |
-| **1** | **Inicial:** Se entrega el código de la actividad anterior sin modificaciones significativas, o se presenta un código que no compila o no tiene relación con el control de entrada/salida para mover un objeto en pantalla. |
-| **0** | **No Realizado:** No se presenta evidencia de la actividad en la bitácora. |
-
-**Calificación Obtenida:** `[  ]` / 5
