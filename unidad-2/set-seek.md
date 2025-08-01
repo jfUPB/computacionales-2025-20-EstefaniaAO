@@ -2,6 +2,8 @@
 
 ## 🔎 Fase: Set + Seek
 
+### Actividad 01
+
 <img width="1424" height="764" alt="image" src="https://github.com/user-attachments/assets/d5adeb7a-0fd8-4a96-ab69-349774ff2ac7" />
 
   ``` asm
@@ -25,6 +27,7 @@ screen = 1;
 screen= 0xFFFF;
   ```
 
+### Actividad 02
 
 ---
 <img width="1419" height="780" alt="image" src="https://github.com/user-attachments/assets/1ffd430b-bbb6-4336-87ec-430ce81808fc" />
@@ -49,16 +52,18 @@ screen=-1;
 screen= 0xFFFF;
   ```
 
----
+### Actividad 03
 
-En proceso
+---
 
   ``` asm
 @CONTADOR
-M=0
-@SCREEN
 M=-1
+@SCREEN
+M=0
 
+// "d" tiene código 100 y "i" tiene código 105
+(LEER)
 @KBD
 D=M
 @100
@@ -68,18 +73,20 @@ D;JEQ
 
 @KBD
 D=M
-@100
+@105
 D=D-A
 @IZQUIERDA
 D;JEQ
 
+@LEER
+0;JMP
 
 (DERECHA)
 @CONTADOR
 D=M
 @SCREEN
 A=D+A
-M=-1
+M=0
 
 //
 @CONTADOR
@@ -89,7 +96,61 @@ D=M
 A=D+A
 M=-1
 
+@LEER
+0;JMP
+
 (IZQUIERDA)
 @CONTADOR
-D
+D=M
+@SCREEN
+A=D+A
+M=-1
+
+@LEER
+0;JMP
   ```
+
+  ```c++
+int contador = 0;
+char tecla;
+char* screen = (char*)0x4000; // Dirección base de SCREEN
+char* teclado = (char*)0x6000; // Dirección de KBD (lectura directa en bajo nivel)
+
+while (true) {
+    tecla = *teclado;
+
+    if (tecla == 'd') {
+        screen[contador] = 0;    // Borra posición actual
+        contador++;              // Mueve a la derecha
+        screen[contador] = 0xFF; // Dibuja pixel nuevo
+    }
+
+    if (tecla == 'i') {
+        screen[contador] = 0;    // Borra posición actual
+        contador--;              // Mueve a la izquierda
+        screen[contador] = 0xFF; // Dibuja pixel nuevo
+    }
+}
+  ```
+
+
+#### Predicciones antes de ejecutar (con base en el código ASM):
+- Líneas iniciales (@CONTADOR, M=-1)
+Supongo que aquí se está iniciando un contador en -1 para que luego al sumarle 1 quede en 0 y empiece desde el principio de la pantalla. Aunque no estoy del todo segura, porque si empieza en -1, pensé que podría causar problemas
+
+- Líneas @KBD, D=M, @100, D=D-A...
+Parece que se está leyendo el teclado. El valor ASCII de "d" es 100, así que si presiono esa tecla debería irse a la etiqueta DERECHA. Lo mismo con "i" que vale 105. Pero no sé si el teclado lee rápido o si se necesita soltar la tecla para que funcione de nuevo.
+
+- Bloque DERECHA y IZQUIERDA
+Creo que cada bloque borra la posición actual del pixel y luego lo mueve en la dirección correcta. Me parece curioso que en el bloque de izquierda no esté M=M-1 (aunque en este código sí lo está, menos mal). Me pregunto si el pixel va a salir de la pantalla si sigo presionando muchas veces.
+
+- Pantalla (@SCREEN, A=D+A)
+Esto está accediendo a una dirección de memoria que representa la pantalla. No sabía que así se movía la posición del pixel, pero con el A=D+A creo que se está sumando el valor de D al inicio de SCREEN para ir avanzando o retrocediendo según el contador.
+
+#### Ejecución y observación:
+Cuando cargo el programa y presiono "d", el pixel se mueve a la derecha, como esperaba.
+Si presiono "i", se mueve hacia la izquierda.
+Si mantengo presionada una tecla, se mueve muchas veces seguidas. Me hace pensar que sería mejor agregar un pequeño delay o ver si hay una forma de detectar cuándo la tecla se suelta.
+El pixel puede desaparecer si me paso de la pantalla (por ejemplo, hacia direcciones negativas del contador), pero como decía el enunciado, no importa para esta actividad.
+Si cambio el M=-1 por otro valor, el brillo del pixel cambia, lo cual también podría usarse para hacer que se vea más tenue o más brillante según la dirección o el estado del movimiento.
+
