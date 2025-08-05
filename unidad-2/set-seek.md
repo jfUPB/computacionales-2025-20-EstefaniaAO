@@ -113,22 +113,22 @@ M=-1
   ```c++
 int contador = 0;
 char tecla;
-char* screen = (char*)0x4000; // Dirección base de SCREEN
-char* teclado = (char*)0x6000; // Dirección de KBD (lectura directa en bajo nivel)
+char* screen = (char*)0x4000; 
+char* teclado = (char*)0x6000; // DKBD
 
 while (true) {
     tecla = *teclado;
 
     if (tecla == 'd') {
-        screen[contador] = 0;    // Borra posición actual
-        contador++;              // Mueve a la derecha
-        screen[contador] = 0xFF; // Dibuja pixel nuevo
+        screen[contador] = 0;    // borra posición actual
+        contador++;              // bueve a la derecha
+        screen[contador] = 0xFF; // lo dibuja
     }
 
     if (tecla == 'i') {
-        screen[contador] = 0;    // Borra posición actual
-        contador--;              // Mueve a la izquierda
-        screen[contador] = 0xFF; // Dibuja pixel nuevo
+        screen[contador] = 0;    // borra posición actual
+        contador--;              // mueve a la izquierda
+        screen[contador] = 0xFF; // lo dibuja
     }
 }
   ```
@@ -153,4 +153,5 @@ Si presiono "i", se mueve hacia la izquierda.
 Si mantengo presionada una tecla, se mueve muchas veces seguidas. Me hace pensar que sería mejor agregar un pequeño delay o ver si hay una forma de detectar cuándo la tecla se suelta.
 El pixel puede desaparecer si me paso de la pantalla (por ejemplo, hacia direcciones negativas del contador), pero como decía el enunciado, no importa para esta actividad.
 Si cambio el M=-1 por otro valor, el brillo del pixel cambia, lo cual también podría usarse para hacer que se vea más tenue o más brillante según la dirección o el estado del movimiento.
+
 
