@@ -154,4 +154,111 @@ Si mantengo presionada una tecla, se mueve muchas veces seguidas. Me hace pensar
 El pixel puede desaparecer si me paso de la pantalla (por ejemplo, hacia direcciones negativas del contador), pero como decía el enunciado, no importa para esta actividad.
 Si cambio el M=-1 por otro valor, el brillo del pixel cambia, lo cual también podría usarse para hacer que se vea más tenue o más brillante según la dirección o el estado del movimiento.
 
+### Actividad 04
 
+```c++
+int sum = 0;
+for(int i = 1; i <= 100; i++){
+    sum += i;
+}
+```
+
+Este programa suma los números del 1 al 100. El ciclo `for` en C++ es muy parecido al `while` cuando se pasa a ensamblador. Todo se hace con saltos y comparaciones. 
+
+l contador empieza en 1 y se va sumando hasta que llega a 100. Me di cuenta de que la estructura es casi igual que en ejercicios anteriores con `while`, solo que aquí ya sabía cómo organizar mejor la condición y el incremento del ejercicio
+
+```asm
+@i         
+M=1        // i = 1
+
+@sum       // sum
+M=0        // sum = 0
+
+(LOOP)
+@i
+D=M        // D = i
+@100
+D=D-A      // D = i - 100
+@END
+D;JGT      // Si i > 100, termina el ciclo
+
+@i
+D=M        // D = i
+@sum
+M=D+M      // sum += i
+
+@i
+M=M+1      // i++
+
+@LOOP
+0;JMP      // repetir el ciclo
+
+(END)
+@END
+0;JMP      // loop infinito
+```
+
+### Actividad 05
+
+```c++
+int a = 10;
+int* p;
+p = &a;
+*p = 20;
+```
+
+
+
+```asm
+@10
+D=A
+@16      // a
+M=D
+
+@16
+D=A
+@17      // p
+M=D
+
+@17
+A=M
+@20
+D=A
+M=D
+
+```
+
+
+
+```c++
+int a = 10;
+int b = 5;
+int *p;
+p = &a;
+b = *p;
+```
+
+
+
+```asm
+@10
+D=A
+@16       // a
+M=D
+
+@5
+D=A
+@17       // b
+M=D
+
+@16
+D=A
+@18       // p
+M=D
+
+@18
+A=M
+D=M
+@17
+M=D
+```
