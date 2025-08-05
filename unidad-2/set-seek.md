@@ -56,7 +56,7 @@ screen= 0xFFFF;
 
 ---
 
-  ``` asm
+``` asm
 @CONTADOR
 M=-1
 @SCREEN
@@ -200,6 +200,10 @@ M=M+1      // i++
 
 ### Actividad 05
 
+#### Primer ejemplo
+
+Los punteros son los que nos permiten acceder a direcciones de memoria directamente.
+
 ```c++
 int a = 10;
 int* p;
@@ -207,7 +211,7 @@ p = &a;
 *p = 20;
 ```
 
-
+se está creando una variable a con valor 10, luego un puntero p que apunta a la dirección de a. Al final, escribo en esa dirección el valor 20, entonces a=20.
 
 ```asm
 @10
@@ -228,7 +232,7 @@ M=D
 
 ```
 
-
+#### Segundo ejemplo
 
 ```c++
 int a = 10;
@@ -238,18 +242,18 @@ p = &a;
 b = *p;
 ```
 
-
+Aquí se usa el puntero p para leer el valor de a para luego ponérselo a b.
 
 ```asm
 @10
 D=A
-@16       // a
-M=D
+@16       // a (asigno valor a RAM[16])
+M=D       // a = 10
 
 @5
 D=A
-@17       // b
-M=D
+@17       // b (asigno valor a RAM[17])
+M=D       // b = 5
 
 @16
 D=A
@@ -262,3 +266,6 @@ D=M
 @17
 M=D
 ```
+Para simular un puntero en ensamblador, se guarda una dirección en la celda de memoria, y luego acceder a esa dirección usando A=M.
+
+Diferente a otras variables porque en vez de guardar directamente un número, se guarda una dirección y luego accedo a lo que hay allá
