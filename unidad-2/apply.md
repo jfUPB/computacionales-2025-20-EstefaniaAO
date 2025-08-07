@@ -362,15 +362,4 @@ M=D
 - Ver cómo se construye todo paso a paso me ayudó a entender mucho mejor cómo funciona el acceso a memoria en bajo nivel.
 
 
-Defino a sum y el int j
-
-``` asm
-
-```
-
-Defino el loop
-
-``` asm
-
-``` 
 
