@@ -26,11 +26,49 @@ Valor final de val_C: 20
 
 Mi predicción inicial es que solo el primer valor de val_A cambia, y que las otras variables no se ven afectadas realmente. También supuse que contador_estatico se reinicia cada vez.
 
+#### Diagrama de memoria
+
++-------------------------------+
+|       Segmento de código      |
+|   main(), ejecutarContador(), |
+|   sumaPorValor(),             |
+|   sumaPorReferencia(),        |
+|   sumaPorPuntero()            |
++-------------------------------+
+| Variables globales y estáticas|
+| - contador_global (global)    |
+| - contador_estatico (estática)|
++-------------------------------+
+|           Heap                | 
+|   (No se usa en este programa)|
++-------------------------------+
+|           Stack               |
+| - val_A, val_B, val_C (main)  |
+| - a (parámetro en cada función|
+|   sumaPorValor, sumaPorRef,   |
+|   sumaPorPuntero)             |
++-------------------------------+
+
+#### Autoexplicación :)  :
+
+Segmento de código:
+Aquí están todas las instrucciones del programa, incluidas las funciones main, ejecutarContador, sumaPorValor, sumaPorReferencia y sumaPorPuntero. En este punto, la función main sigue existiendo en este segmento porque aún no termina su ejecución.
+
+Variables globales y estáticas:
+En esta región se encuentran contador_global y contador_estatico. Ambas persisten durante toda la ejecución del programa. La diferencia es que contador_global se declaró fuera de cualquier función, mientras que contador_estatico está dentro de ejecutarContador() pero, al ser estática, también pertenece a este segmento y conserva su valor entre llamadas.
+
+Heap:
+En este programa no uso asignación dinámica (new o malloc), así que este segmento vacío.
+
+Stack:
+Aquí están las variables locales de main: val_A, val_B y val_C. Como estoy justo antes de que main termine, estas todavía existen en el stack.
+Por otro lado, el parámetro a de la función sumaPorValor ya no está en el stack, porque esa función terminó su ejecución y al salir se liberó la memoria que ocupaba.
+
 ### B. Verificación con el depurador
 
 #### 3. Salida real observada
 
---- Experimento con paso de parámetros ---
+  ``` --- Experimento con paso de parámetros ---
 Valor inicial de val_A: 20
   -> Dentro de sumaPorValor, 'a' ahora es: 30
 Valor final de val_A: 20
@@ -47,6 +85,7 @@ Valor final de val_C: 30
   -> Llamada a ejecutarContador. Valor de contador_estatico: 1
   -> Llamada a ejecutarContador. Valor de contador_estatico: 2
   -> Llamada a ejecutarContador. Valor de contador_estatico: 3
+``` 
   
 <img width="585" height="375" alt="image" src="https://github.com/user-attachments/assets/5fc8313e-9f26-46c7-abb9-361ab5468ea9" />
 
@@ -57,28 +96,34 @@ Valor final de val_C: 30
 Diferencia: en mi predicción puse que val_A quedaba en 30, pero en realidad sigue en 20.
 Esto confirma que al pasar por valor se crea una copia del dato en el stack, y cualquier cambio se queda dentro de la función.
 
-Captura aquí: ventana de variables mostrando val_A = 20 después de sumaPorValor.
+<img width="1865" height="711" alt="image" src="https://github.com/user-attachments/assets/47225240-c87d-425f-b0ee-b836a22e4997" />
+
 
 4.2 Paso por referencia
 
 Aquí sí coincidió mi predicción: val_B pasó a 30.
 Esto es porque la función recibe una referencia, es decir, una especie de alias de la misma variable. No hay copia.
 
-Captura aquí: ventana de variables mostrando val_B = 30 después de sumaPorReferencia.
+<img width="1919" height="918" alt="image" src="https://github.com/user-attachments/assets/628d5704-723a-473a-a444-2899567f122b" />
+
 
 4.3 Paso por puntero
 
 También coincidió: val_C quedó en 30.
 Con punteros, la función recibe una dirección de memoria, y al desreferenciar (*a) se puede modificar directamente la variable original.
 
-Captura aquí: ventana de variables mostrando val_C = 30 después de sumaPorPuntero.
+<img width="1915" height="913" alt="image" src="https://github.com/user-attachments/assets/232b5f2d-0031-44f3-9408-d12bbe5af55b" />
+
 
 4.4 Variable estática
 
 En cada llamada a ejecutarContador, contador_estatico fue aumentando: 1, luego 2, luego 3.
 A diferencia de una variable local normal, no se destruye al salir de la función: se guarda en memoria estática y “recuerda” su valor entre llamadas.
 
-Captura aquí: ventana de variables mostrando contador_estatico cambiando en cada llamada.
+<img width="946" height="242" alt="image" src="https://github.com/user-attachments/assets/2cad44bc-9f1e-4be2-8deb-7f155a8aa7b3" />
+<img width="944" height="272" alt="image" src="https://github.com/user-attachments/assets/8cf27e8a-a93b-47bb-ad92-8bd9d8bba9a1" />
+<img width="947" height="254" alt="image" src="https://github.com/user-attachments/assets/d2ae9dc0-9b57-42c9-9f06-70c4be381ef0" />
+
 
 
 #### 5. Diferencias observadas:
@@ -102,3 +147,4 @@ Eso significa que:
 - Se inicializa una sola vez.
 - Persiste en memoria toda la ejecución del programa.
 - Aunque no es visible fuera de la función, “recuerda” su valor cada vez que lo llamo.
+
