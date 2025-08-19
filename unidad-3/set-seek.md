@@ -119,7 +119,7 @@ Valor final de val_C: 30
 
 
 #### 4. 
-4.1 Paso por valor
+- Paso por valor
 
 Diferencia: en mi predicción puse que val_A quedaba en 30, pero en realidad sigue en 20.
 Esto confirma que al pasar por valor se crea una copia del dato en el stack, y cualquier cambio se queda dentro de la función.
@@ -127,7 +127,7 @@ Esto confirma que al pasar por valor se crea una copia del dato en el stack, y c
 <img width="1865" height="711" alt="image" src="https://github.com/user-attachments/assets/47225240-c87d-425f-b0ee-b836a22e4997" />
 
 
-4.2 Paso por referencia
+- Paso por referencia
 
 Aquí sí coincidió mi predicción: val_B pasó a 30.
 Esto es porque la función recibe una referencia, es decir, una especie de alias de la misma variable. No hay copia.
@@ -135,7 +135,7 @@ Esto es porque la función recibe una referencia, es decir, una especie de alias
 <img width="1919" height="918" alt="image" src="https://github.com/user-attachments/assets/628d5704-723a-473a-a444-2899567f122b" />
 
 
-4.3 Paso por puntero
+- Paso por puntero
 
 También coincidió: val_C quedó en 30.
 Con punteros, la función recibe una dirección de memoria, y al desreferenciar (*a) se puede modificar directamente la variable original.
@@ -143,7 +143,7 @@ Con punteros, la función recibe una dirección de memoria, y al desreferenciar 
 <img width="1915" height="913" alt="image" src="https://github.com/user-attachments/assets/232b5f2d-0031-44f3-9408-d12bbe5af55b" />
 
 
-4.4 Variable estática
+- Variable estática
 
 En cada llamada a ejecutarContador, contador_estatico fue aumentando: 1, luego 2, luego 3.
 A diferencia de una variable local normal, no se destruye al salir de la función: se guarda en memoria estática y “recuerda” su valor entre llamadas.
@@ -175,6 +175,7 @@ Eso significa que:
 - Se inicializa una sola vez.
 - Persiste en memoria toda la ejecución del programa.
 - Aunque no es visible fuera de la función, “recuerda” su valor cada vez que lo llamo.
+
 
 
 
