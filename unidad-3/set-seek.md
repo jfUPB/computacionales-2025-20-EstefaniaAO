@@ -2,6 +2,7 @@
 
 ## 🔎 Fase: Set + Seek
 
+  ```
 Valor inicial de val_A: 20
   -> Dentro de sumaPorValor, 'a' ahora es: 30
 Valor final de val_A: 30   
@@ -17,17 +18,37 @@ Valor inicial de val_C: 20
 Valor final de val_C: 20   
    // (3) pensé que era igual al paso por valor, que no se modificaba el original.
 
+
 --- Experimento con variables estáticas ---
   -> Llamada a ejecutarContador. Valor de contador_estatico: 1
   -> Llamada a ejecutarContador. Valor de contador_estatico: 1
   -> Llamada a ejecutarContador. Valor de contador_estatico: 1   
    // (4) asumí que se reiniciaba cada vez que entraba a la función.
+  ```
 
+- sumaPorValor
 
-Mi predicción inicial es que solo el primer valor de val_A cambia, y que las otras variables no se ven afectadas realmente. También supuse que contador_estatico se reinicia cada vez.
+Predije que val_A iba a quedar en 20 y que el parámetro a en la función iba a ser 10.
+*Razón de mi predicción:* pensaba que como se hace una copia del valor, el parámetro a trabajaba de forma independiente y no afectaba a la variable original en main. Imaginé que al sumar 10 dentro de la función, ese cambio se perdía al salir.
+
+- sumaPorReferencia
+
+Predije que val_B seguiría en 20 y que dentro de la función se vería 30.
+*Razón de mi predicción:* creí que aunque se usara &, el compilador trataba el valor como una copia temporal dentro de la función, algo parecido al paso por valor. Me confundí porque no entendía aún que la referencia es literalmente otro nombre para la misma variable.
+
+- sumaPorPuntero
+
+Predije que val_C iba a quedar en 20 y que el puntero apuntaría a esa dirección, pero sin modificar el contenido.
+*Razón de mi predicción:* pensé que el puntero solo permitía “ver” el valor original, como si fuera una ventana, pero que no tenía efecto sobre la variable salvo que se reasignara dentro de la función. Por eso asumí que al terminar, val_C no cambiaría.
+
+- contador_estatico
+
+Predije que cada vez que se llamaba la función, contador_estatico se iba a reiniciar en 0.
+*Razón de mi predicción:* lo asociaba a las variables locales normales que viven en el stack y se destruyen al salir de la función. No entendía que la palabra static lo coloca en un segmento distinto (datos estáticos) donde conserva su valor entre llamadas.
 
 #### Diagrama de memoria
 
+  ```
 +-------------------------------+
 |       Segmento de código      |
 |   main(), ejecutarContador(), |
@@ -48,6 +69,7 @@ Mi predicción inicial es que solo el primer valor de val_A cambia, y que las ot
 |   sumaPorValor, sumaPorRef,   |
 |   sumaPorPuntero)             |
 +-------------------------------+
+  ```
 
 #### Autoexplicación :)  :
 
@@ -138,7 +160,7 @@ Paso por puntero: funciona parecido a la referencia, pero con la diferencia de q
 
 Variable estática: lo más interesante fue notar que contador_estatico se queda en el segmento de datos estáticos y no en el stack. Eso explica que “recuerde” el valor de la ejecución anterior. Una variable local normal se destruye cada vez que la función termina, pero la estática persiste hasta que acaba todo el programa.
 
-#### Explica con tus propias palabras el comportamiento de contador_estatico. ¿Por qué “recuerda” su valor entre llamadas a la función ejecutarContador? ¿En qué se diferencia de una variable local normal?
+#### 6. Explica con tus propias palabras el comportamiento de contador_estatico. ¿Por qué “recuerda” su valor entre llamadas a la función ejecutarContador? ¿En qué se diferencia de una variable local normal?
 
 Una variable local normal se crea y destruye cada vez que la función termina.
 En cambio, una variable estática local como contador_estatico se guarda en el segmento de datos estáticos (igual que las globales), por eso solo se inicializa una vez y conserva su valor en todas las llamadas, aunque no sea visible desde main.
@@ -147,4 +169,5 @@ Eso significa que:
 - Se inicializa una sola vez.
 - Persiste en memoria toda la ejecución del programa.
 - Aunque no es visible fuera de la función, “recuerda” su valor cada vez que lo llamo.
+
 
