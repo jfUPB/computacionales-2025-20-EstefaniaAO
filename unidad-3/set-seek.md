@@ -29,21 +29,25 @@ Valor final de val_C: 20
 - sumaPorValor
 
 Predije que val_A iba a quedar en 20 y que el parámetro a en la función iba a ser 10.
+
 *Razón de mi predicción:* pensaba que como se hace una copia del valor, el parámetro a trabajaba de forma independiente y no afectaba a la variable original en main. Imaginé que al sumar 10 dentro de la función, ese cambio se perdía al salir.
 
 - sumaPorReferencia
 
 Predije que val_B seguiría en 20 y que dentro de la función se vería 30.
+
 *Razón de mi predicción:* creí que aunque se usara &, el compilador trataba el valor como una copia temporal dentro de la función, algo parecido al paso por valor. Me confundí porque no entendía aún que la referencia es literalmente otro nombre para la misma variable.
 
 - sumaPorPuntero
 
 Predije que val_C iba a quedar en 20 y que el puntero apuntaría a esa dirección, pero sin modificar el contenido.
+
 *Razón de mi predicción:* pensé que el puntero solo permitía “ver” el valor original, como si fuera una ventana, pero que no tenía efecto sobre la variable salvo que se reasignara dentro de la función. Por eso asumí que al terminar, val_C no cambiaría.
 
 - contador_estatico
 
 Predije que cada vez que se llamaba la función, contador_estatico se iba a reiniciar en 0.
+
 *Razón de mi predicción:* lo asociaba a las variables locales normales que viven en el stack y se destruyen al salir de la función. No entendía que la palabra static lo coloca en un segmento distinto (datos estáticos) donde conserva su valor entre llamadas.
 
 #### Diagrama de memoria
@@ -169,5 +173,6 @@ Eso significa que:
 - Se inicializa una sola vez.
 - Persiste en memoria toda la ejecución del programa.
 - Aunque no es visible fuera de la función, “recuerda” su valor cada vez que lo llamo.
+
 
 
