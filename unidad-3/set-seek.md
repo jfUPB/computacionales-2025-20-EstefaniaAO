@@ -55,23 +55,25 @@ Predije que cada vez que se llamaba la función, contador_estatico se iba a rein
   ```
 +-------------------------------+
 |       Segmento de código      |
-|   main(), ejecutarContador(), |
-|   sumaPorValor(),             |
-|   sumaPorReferencia(),        |
-|   sumaPorPuntero()            |
+|  (instrucciones, funciones)   |
+|  - función main()             |
+|  - función sumaPorValor()     |
+|  - función sumaPorReferencia()|
+|  - función sumaPorPuntero()   |
 +-------------------------------+
-| Variables globales y estáticas|
-| - contador_global (global)    |
-| - contador_estatico (estática)|
+| Variables globales/estáticas  |
+|  - contador_global = 1        |
+|  - contador_estatico = 1      |
 +-------------------------------+
-|           Heap                | 
-|   (No se usa en este programa)|
+|             Heap              |
+|   (vacío, no se usó new/malloc)|
 +-------------------------------+
-|           Stack               |
-| - val_A, val_B, val_C (main)  |
-| - a (parámetro en cada función|
-|   sumaPorValor, sumaPorRef,   |
-|   sumaPorPuntero)             |
+|             Stack             |
+|  - val_A = 20                 |
+|  - val_B = 30                 |
+|  - val_C = 30                 |
+|  (parámetros ya liberados al  |
+|   salir de las funciones)     |
 +-------------------------------+
   ```
 
@@ -173,6 +175,7 @@ Eso significa que:
 - Se inicializa una sola vez.
 - Persiste en memoria toda la ejecución del programa.
 - Aunque no es visible fuera de la función, “recuerda” su valor cada vez que lo llamo.
+
 
 
 
