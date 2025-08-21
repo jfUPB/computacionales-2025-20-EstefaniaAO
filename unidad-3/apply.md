@@ -131,7 +131,8 @@ int main() {
     return 0;
 }
   ```
-  
+  <img width="1919" height="1027" alt="image" src="https://github.com/user-attachments/assets/0a884eaf-da82-475b-8b4e-d6046a8f5381" />
+
 Justificación de la Solución:
 
 - Uso de std::array en lugar de punteros dinámicos
@@ -144,4 +145,5 @@ Los destructores sirven para ver el ciclo de vida del objeto. Aquí ya no necesi
 
 - Evitar punteros sin gestión automática
 El uso directo de new y delete puede ser mala idea, es preferible estructuras más seguras para manejar memoria (Actividad 07). Reemplazarlos por estructuras seguras hace la clase más segura y evita fugas y errores difíciles de rastrear.
+
 
