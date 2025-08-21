@@ -142,5 +142,6 @@ Gracias a esto, cada copia del objeto tiene sus propios valores y no se comparte
 Mantengo el destructor para imprimir mensajes, pero no para liberar memoria, porque ya no es necesario.
 Los destructores sirven para ver el ciclo de vida del objeto. Aquí ya no necesito liberar nada manualmente, pero mantengo el mensaje para seguir la pista en la ejecución.
 
-- Evitar punteros crudos
+- Evitar punteros sin gestión automática
 El uso directo de new y delete puede ser mala idea, es preferible estructuras más seguras para manejar memoria (Actividad 07). Reemplazarlos por estructuras seguras hace la clase más segura y evita fugas y errores difíciles de rastrear.
+
