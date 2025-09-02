@@ -13,7 +13,6 @@ struct Node {
 	float x, y;
 	float radius;
 	ofColor color;
-	float opacity;
 	Node * next;
 
 	Node(float _x, float _y, float _radius, ofColor _color, float _opacity)
@@ -21,7 +20,6 @@ struct Node {
 		, y(_y)
 		, radius(_radius)
 		, color(_color)
-		, opacity(_opacity)
 		, next(nullptr) { }
 };
 
@@ -148,11 +146,15 @@ void ofApp::draw() {
 
 	// TODO: dibujar los trazos almacenados en la cola.
 	Node * current = strokes.front;
+	int index = 0;
 	// Recorre los nodos desde strokes.front hasta nullptr y usa ofDrawCircle().
 	while (current != nullptr) {
-		ofSetColor(current->color, current->opacity);
+		float t = (float)index / (strokes.size - 1);
+		float interpolatedOpacity = ofLerp(80, 255, t);
+		ofSetColor(current->color, interpolatedOpacity);
 		ofDrawCircle(current->x, current->y, current->radius);
 		current = current->next;
+		index++;
 	}
 }
 
@@ -165,13 +167,14 @@ void ofApp::keyPressed(int key) {
 	if (key == 'a') {
 		// TODO: alternar entre 50 y 100 trazos.
 		strokes.maxSize = (strokes.maxSize == 50) ? 100 : 50;
+		while (strokes.size > strokes.maxSize) {
+			strokes.dequeue();
+		}
 	} else if (key == 's') {
 		// TODO: guardar el frame actual.
 		ofSaveScreen("captura_" + ofGetTimestampString() + ".png");
 	}
 }
-
-
 ```
 
 Código para main.cpp:
@@ -190,4 +193,5 @@ int main() {
 ## Demostración:
 
 [Aquí está el video demostrativo de mi aplicación](url del video no listado en youtube)
+
 
