@@ -106,11 +106,13 @@ public:
 	void keyPressed(int key);
 };
 
+
 ```
 
 Código para ofApp.cpp:
 
 ``` cpp
+
 #include "ofApp.h"
 
 //--------------------------------------------------------------
@@ -178,6 +180,7 @@ void ofApp::keyPressed(int key) {
 ```
 
 Código para main.cpp:
+
 ``` cpp
 #include "ofApp.h"
 #include "ofMain.h"
@@ -187,12 +190,10 @@ int main() {
 	ofSetupOpenGL(1024, 768, OF_WINDOW); 
 	ofRunApp(new ofApp());
 }
-
 ```
+
 
 ## Demostración:
 
 [Aquí está el video demostrativo de mi aplicación](https://youtu.be/8kMLMEpBqu8)
-
-
 
