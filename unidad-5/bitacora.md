@@ -130,7 +130,7 @@ Esto quiere decir que Circulo esta heredando métodos y atributos de figura.
 
 ##### Un objeto de tipo Circulo, además de Radio, ¿Qué otros datos almacena en su interior gracias a la herencia?
 
-nombre, Nombre y Dibujar().
+nombre, Nombre y quizá Dibujar().
 
 #### Polimorfismo:
 
@@ -149,21 +149,64 @@ No estoy segura pero asumo que este método aunque ya esta llamado las propias c
 
 #### Memoria y herencia: cuando creas un objeto Rectangulo, este tiene Base, Altura y también Nombre. ¿Cómo te imaginas que se organizan esos tres datos en la memoria del computador para formar un solo objeto?
 
+En direcciones de memoria distintas seguidas para cada uno creado, incluyendo los atributos heredados.
+
 #### El mecanismo del polimorfismo: pensemos de nuevo en la llamada fig.Dibujar(). El compilador solo sabe que fig es una Figura. ¿Cómo decide el programa, mientras se está ejecutando, si debe llamar al Dibujar del Circulo o al del Rectangulo? Lanza algunas ideas o hipótesis.
 
+El valor de la dirección de figura cambia según la figura que lo llame, entonces lo que lee el programa cuando se ejecuta Dibujar() es directamente el circulo o el rectangulo.
+
 #### La barrera del encapsulamiento: ¿Cómo crees que el compilador logra que no puedas acceder a un miembro private desde fuera de la clase? ¿Es algo que se revisa cuando escribes el código, o es una protección que existe mientras el programa se ejecuta? ¿Por qué piensas eso?
+
+Una protección mientras el programa se ejecuta o se compila, o también podría no estar declarado según quién lo llame. No sé la verdad.
 
 ## 2.  **La pregunta inicial**
 
 ---
-### *¿Por qué...?*
+### ¿Es posible acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria?
 ---
 
-Escogí esta pregunta para
+Escogí esta pregunta ya que me interesa entender los límites del programa y que tan privada o protegida es realmente una aplicación.
 
 ## 3.  **Registro de exploración:** 
+
+Ya sé que puedo leer los datos usando los punteros, pero
+### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
+
+
+
+### ¿Existen otras formas para acceder a la memoria y copiar datos privados antes de compilar en C++?
+
+
+
+### ¿Cómo se pueden leer campos privados heredados?
+
+
+
+Pero para esto primero quiero investigar y entender
+#### ¿Cómo funciona la herencia en términos de memoria?
+
+
+
+### ¿
+
+
+
+### ¿Cómo puedo acceder a datos privados mientras el programa se está ejecutando?
+
+
+
+> "Existen diversas técnicas que permiten a un atacante acceder a estos datos mientras o poco después de que el programa se está ejecutando. Una de las más comunes es el volcado de memoria en tiempo de ejecución, donde el atacante utiliza herramientas como gcore, ProcDump, gdb o debuggers para capturar el contenido de la RAM asociada al proceso activo. En ese volcado, pueden buscarse directamente cadenas de texto o patrones que revelen contraseñas almacenadas en variables como std::string o buffers de caracteres. Otra técnica es el análisis post-mortem, que aprovecha el hecho de que, al cerrar un programa, la memoria no se borra instantáneamente, por lo que fragmentos de datos sensibles podrían permanecer accesibles hasta que el sistema los sobrescriba. En casos extremos, se han documentado ataques físicos como el Cold Boot Attack, donde se extrae la memoria RAM de un equipo recién apagado y se congela para mantener temporalmente su contenido, permitiendo su lectura en otro sistema."
+
+
+
 > Aquí documentas cada ciclo de pregunta -> hipótesis -> experimento -> hallazgo -> reflexión.
 > Debe ser rico en evidencia visual (código, capturas del depurador con anotaciones, diagramas).
+
+Conclusiones:
+
+Sin tener acceso al código fuente, un atacante puede obtener contraseñas si el programa las guarda en memoria sin protección. El modificador private no protege en tiempo de ejecución, solo evita el acceso desde otras clases en tiempo de compilación. 
+
+Incluso cuando las contraseñas no están presentes de forma explícita en el código fuente, su paso por memoria RAM representa un riesgo. A menos que se usen prácticas activas de limpieza y protección de memoria, es posible que una contraseña sea extraída mediante técnicas de análisis en tiempo de ejecución.
 
 ## 4.  **Consolidación, autoevaluación y cierre:**
 > [!CAUTION]
