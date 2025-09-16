@@ -171,6 +171,109 @@ Escogí esta pregunta ya que me interesa entender los límites del programa y qu
 
 Antes de proceder con el experimento 03 para resolver la pregunta inicial, primero exploraré la aplicación:
 
+El programa del experimento 2 básicamente hace como un simulador de fuegos artificiales con partículas.  
+La idea general es que hay una partícula principal (`RisingParticle`) que aparece en la parte de abajo de la pantalla, va subiendo con una velocidad y tiene un tiempo de vida. Cuando llega al límite o se le acaba el tiempo, explota y de ahí salen otras partículas.  
+
+Esas explosiones pueden ser de tres tipos distintos:
+- **CircularExplosion**: que se ve como un círculo de partículas saliendo en todas direcciones.  
+- **RandomExplosion**: que las lanza de manera más aleatoria.  
+- **StarExplosion**: que dibuja las partículas como estrellitas.  
+
+Además el programa tiene algunas interacciones:  
+- Si hago click aparece una sola partícula.  
+- Con la barra espaciadora salen 1000 partículas de golpe.  
+- Y si presiono la tecla **S**, se guarda una captura de pantalla como en otros programas que hemos hecho.  
+
+Aquí esta la clase Particle que básicamente crea como los parametros o las cosas que tiene que tener un Particle, como `update` y `draw`:
+
+```C++
+class Particle {
+public:
+    virtual ~Particle() {}
+    virtual void update(float dt) = 0;
+    virtual void draw() = 0;
+    virtual bool isDead() const = 0;
+    virtual bool shouldExplode() const { return false; }
+    virtual glm::vec2 getPosition() const { return glm::vec2(0, 0); }
+    virtual ofColor getColor() const { return ofColor(255); }
+};
+```
+
+En esta parte del código podemos ver el concepto de herencia y creo que también de encapsulamiento. Ya que la clase RisingParticle hereda las cosas que tiene Particle, además de agregar otras cosas. También aparece el encapsulamiento porque las variables (position, velocity, etc.) son protected, o sea que no cualquiera puede acceder a ellas directamente. Si necesito esos datos, hay métodos como getPosition() o getColor().
+
+```C++
+class RisingParticle : public Particle {
+protected:
+    glm::vec2 position;
+    glm::vec2 velocity;
+    ofColor color;
+    float lifetime;
+    float age;
+    bool exploded;
+public:
+    RisingParticle(const glm::vec2& pos, const glm::vec2& vel, const ofColor& col, float life)
+        : position(pos), velocity(vel), color(col), lifetime(life), age(0), exploded(false) {}
+
+    void update(float dt) override {
+        position += velocity * dt;
+        age += dt;
+        velocity.y += 9.8f * dt * 8; // gravedad
+        float explosionThreshold = ofGetHeight() * 0.15 + ofRandom(-30, 30);
+        if (position.y <= explosionThreshold || age >= lifetime) {
+            exploded = true;
+        }
+    }
+
+    void draw() override {
+        ofSetColor(color);
+        ofDrawCircle(position, 10);
+    }
+
+    bool isDead() const override { return exploded; }
+    bool shouldExplode() const override { return exploded; }
+    glm::vec2 getPosition() const override { return position; }
+    ofColor getColor() const override { return color; }
+};
+
+```
+
+Luego está la `ExplosionParticle` que también hereda de particle
+
+``` C++
+class ExplosionParticle : public Particle 
+```
+
+Con sus atributos protected (encapsulamiento):
+
+``` C++
+protected:
+    glm::vec2 position;
+    glm::vec2 velocity;
+    ofColor color;
+```
+
+Es interesante porque la clase hijo `ExplosionParticle` también es una clase padre de `CircularExplosion`, es llamativo ver como la herencia se puede ejecutar varias veces, irse encadenando y adaptando según las necesidades del código. También como redefine `draw()` con el override:
+
+``` C++
+class CircularExplosion : public ExplosionParticle {
+public:
+    CircularExplosion(const glm::vec2& pos, const ofColor& col)
+        : ExplosionParticle(pos, glm::vec2(0, 0), col, 1.2f, ofRandom(16, 32)) {
+        float angle = ofRandom(0, TWO_PI);
+        float speed = ofRandom(80, 200);
+        velocity = glm::vec2(cos(angle), sin(angle)) * speed;
+    }
+
+    void draw() override {
+        ofSetColor(color);
+        ofDrawCircle(position, size);
+    }
+};
+```
+
+Esta es una de las explosiones específicas.
+Hereda de ExplosionParticle y lo que hace diferente es que calcula un ángulo y velocidad para que las partículas salgan como en un círculo. Y si no me equivoco redefinir draw() también es un ejemplo de polimorfismo.
+
 <img width="1080" height="400" alt="2" src="https://github.com/user-attachments/assets/1136e8cf-73eb-4697-82fe-eae4db9265da" />
 <img width="1080" height="400" alt="1" src="https://github.com/user-attachments/assets/ff70ea0f-0069-4db2-af6e-e5a6e310f1b6" />
 
