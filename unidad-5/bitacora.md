@@ -169,6 +169,12 @@ Escogí esta pregunta ya que me interesa entender los límites del programa y qu
 
 ## 3.  **Registro de exploración:** 
 
+Antes de proceder con el experimento 03 para resolver la pregunta inicial, primero exploraré la aplicación:
+
+<img width="1080" height="400" alt="2" src="https://github.com/user-attachments/assets/1136e8cf-73eb-4697-82fe-eae4db9265da" />
+<img width="1080" height="400" alt="1" src="https://github.com/user-attachments/assets/ff70ea0f-0069-4db2-af6e-e5a6e310f1b6" />
+
+
 Ya sé que puedo leer los datos usando los punteros, pero
 ### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
 
