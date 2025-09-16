@@ -1,4 +1,4 @@
-# Bitácora de aprendizaje de la unidad 5
+<img width="1564" height="912" alt="image" src="https://github.com/user-attachments/assets/ed5a7084-c45a-4626-897b-dd36b14c1b9e" /># Bitácora de aprendizaje de la unidad 5
 
 ## 1.  **Diagnóstico inicial**
 ---
@@ -169,7 +169,7 @@ Escogí esta pregunta ya que me interesa entender los límites del programa y qu
 
 ## 3.  **Registro de exploración:** 
 
-Antes de proceder con el experimento 03 para resolver la pregunta inicial, primero exploraré la aplicación:
+Antes de proceder con el experimento 04 para resolver la pregunta inicial, primero exploraré la aplicación de la actividad 02 para explorar la generalidad de estos conceptos de POO:
 
 El programa del experimento 2 básicamente hace como un simulador de fuegos artificiales con partículas.  
 La idea general es que hay una partícula principal (`RisingParticle`) que aparece en la parte de abajo de la pantalla, va subiendo con una velocidad y tiene un tiempo de vida. Cuando llega al límite o se le acaba el tiempo, explota y de ahí salen otras partículas.  
@@ -274,11 +274,123 @@ public:
 Esta es una de las explosiones específicas.
 Hereda de ExplosionParticle y lo que hace diferente es que calcula un ángulo y velocidad para que las partículas salgan como en un círculo. Y si no me equivoco redefinir draw() también es un ejemplo de polimorfismo.
 
+Queda claro tan solo con este ejemplo como se aplica el concepto de Herencia en la programación y su uso, siendo este un principio que nos permite *"duplicar"* o, aunque sea redundante, heredar los atributos y métodos de una clase padre a la clase hijo. Es demasiado útil ya que ahí tenemos las particulas, pero estamos creando distintos tipos. Si en cada tipo estuvieramos repitiendo y repitiendo los mismos atributos ya que son comunes entre todas las particulas, sería un código mal optimizado, repetitivo, díficil de leer y escribir. Es mucho más lógico emplear la herencia y encadenarla.
+
 <img width="1080" height="400" alt="2" src="https://github.com/user-attachments/assets/1136e8cf-73eb-4697-82fe-eae4db9265da" />
 <img width="1080" height="400" alt="1" src="https://github.com/user-attachments/assets/ff70ea0f-0069-4db2-af6e-e5a6e310f1b6" />
 
+Ahora, trabajaré la pregunta inicial:
 
-Ya sé que puedo leer los datos usando los punteros, pero
+### ¿Es posible acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria?
+
+Tomaré el experimento #4 (de los dados por el profe):
+
+``` C++
+class AccessControl {
+
+private:
+    int privateVar;
+
+protected:
+    int protectedVar;
+
+public:
+    int publicVar;
+    AccessControl() : privateVar(1), protectedVar(2), publicVar(3) {}
+};
+
+int main() {
+    AccessControl ac;
+    ac.publicVar = 10; // Válido
+    // ac.protectedVar = 20; // Error de compilación
+    // ac.privateVar = 30; // Error de compilación
+    return 0;
+}
+```
+
+El código compila correctamente y no se presenta ningún error.
+
+<img width="1541" height="922" alt="image" src="https://github.com/user-attachments/assets/42589db8-a1af-4b08-a1b5-d2fbc018afd5" />
+
+Sin embargo, al descomentar las líneas, el código no compila. El motivo es intuitivo, a pesar de tener la misma sintaxis e intención que la línea anterior (`ac.publicVar = 10;`), el programa no se ejecuta debido al tipo de encapsulamiento de estas variables. `publicVar` se podía modificar desde el main ya que es una variable pública, una variable que básicamente se puede acceder durante y en cualquier parte del programa, en cambio, `protectedVar` y `privateVar` no se pueden modificar o leer desde el main ya que fueron declaradas como variables protegida y privada respectivamente.
+
+>Ahora quiero que notes algo. El encapsulamiento solo lo podemos garantizar en tiempo de compilación. Sin embargo, en tiempo de ejecución podemos acceder a los campos privados de un objeto.
+
+``` C++
+#include <iostream>
+
+class MyClass {
+private:
+    int secret1;
+    float secret2;
+    char secret3;
+
+public:
+    MyClass(int s1, float s2, char s3) : secret1(s1), secret2(s2), secret3(s3) {}
+
+    void printMembers() const {
+        std::cout << "secret1: " << secret1 << "\n";
+        std::cout << "secret2: " << secret2 << "\n";
+        std::cout << "secret3: " << secret3 << "\n";
+    }
+};
+
+
+int main() {
+    MyClass obj(42, 3.14f, 'A');
+    // Esta línea causará un error de compilación
+    std::cout << obj.secret1 << std::endl;
+
+    obj.printMembers();  // Método público para mostrar los valores
+    return 0;
+}
+```
+
+En este caso, el código tampoco compila, `'MyClass::secret1': no se puede obtener acceso al miembro private miembro declarado en la clase 'MyClass'`.
+
+<img width="1546" height="64" alt="image" src="https://github.com/user-attachments/assets/9bea4d59-0b6d-425a-b587-291a141869b8" />
+
+``` C++
+#include <iostream>
+
+class MyClass {
+private:
+    int secret1;
+    float secret2;
+    char secret3;
+
+public:
+    MyClass(int s1, float s2, char s3) : secret1(s1), secret2(s2), secret3(s3) {}
+
+    void printMembers() const {
+        std::cout << "secret1: " << secret1 << "\n";
+        std::cout << "secret2: " << secret2 << "\n";
+        std::cout << "secret3: " << secret3 << "\n";
+    }
+};
+
+int main() {
+    MyClass obj(42, 3.14f, 'A');
+
+    // Usando reinterpret_cast para violar el encapsulamiento
+    int* ptrInt = reinterpret_cast<int*>(&obj);
+    float* ptrFloat = reinterpret_cast<float*>(ptrInt + 1);
+    char* ptrChar = reinterpret_cast<char*>(ptrFloat + 1);
+
+    // Accediendo y mostrando los valores privados
+    std::cout << "Accediendo directamente a los miembros privados:\n";
+    std::cout << "secret1: " << *ptrInt << "\n";       // Accede a secret1
+    std::cout << "secret2: " << *ptrFloat << "\n";     // Accede a secret2
+    std::cout << "secret3: " << *ptrChar << "\n";      // Accede a secret3
+
+    return 0;
+}
+``` 
+<img width="1564" height="912" alt="image" src="https://github.com/user-attachments/assets/d6b520c2-1fd4-4fc1-9c33-8ccaecd494a8" />
+
+Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible acceder a estos datos que, en teoría, son secretos o ocultos (según el acceso definido por el modificador `private`). Esto quiere decir que el encapsulamiento, aunque sea muy estricto al momento de compilar, no es realmente un método para "proteger" o "esconder" estos datos privados, si no una herramienta o convención de diseño que se verifica al momento de compilar para que el programador mantenga el código controlado y qué estas variables no sean modificadas en momentos inadecuados o en ciertos fragmentos de código, como una herramienta de control de acceso y mantenimiento de variables. Es decir entonces que a pesar que `secret1`, `secret2` y `secret3` estuvieran encapsulados, se puede acceder a ellos al encontrar su dirección de memoria y el dato que almacenan. Entonces ahora sé que puedo leer datos encapsulados mediante punteros y manipulación directa de la memoria en C++, ahora me queda la duda...
+### ¿Puedo acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria en C#?
+
 ### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
 
 
