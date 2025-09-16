@@ -168,6 +168,8 @@ Una protección mientras el programa se ejecuta o se compila, o también podría
 Escogí esta pregunta ya que me interesa entender los límites del programa y que tan privada o protegida es realmente una aplicación.
 
 ## 3.  **Registro de exploración:** 
+> Aquí documentas cada ciclo de pregunta -> hipótesis -> experimento -> hallazgo -> reflexión.
+> Debe ser rico en evidencia visual (código, capturas del depurador con anotaciones, diagramas).
 
 Antes de proceder con el experimento 04 para resolver la pregunta inicial, primero exploraré la aplicación de la actividad 02 para explorar la generalidad de estos conceptos de POO:
 
@@ -283,6 +285,8 @@ Ahora, trabajaré la pregunta inicial:
 
 ### ¿Es posible acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria?
 
+Aunque los atributos privados de una clase no pueden ser accedidos directamente mediante el uso "normal" de C++, como el acceso directo desde fuera de la clas, es posible que, al manipular directamente la memoria del objeto (por ejemplo, mediante punteros y elementos desde este tipo), se pueda acceder a la información almacenada en dichos atributos. Esto implicaría que el encapsulamiento en lenguajes como C++ no es una protección real en tiempo de ejecución, sino una verificación proporcionada por el compilador, la cual puede ser ignorada si se trabaja a bajo nivel.
+
 Tomaré el experimento #4 (de los dados por el profe):
 
 ``` C++
@@ -389,6 +393,18 @@ int main() {
 <img width="1564" height="912" alt="image" src="https://github.com/user-attachments/assets/d6b520c2-1fd4-4fc1-9c33-8ccaecd494a8" />
 
 Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible acceder a estos datos que, en teoría, son secretos o ocultos (según el acceso definido por el modificador `private`). Esto quiere decir que el encapsulamiento, aunque sea muy estricto al momento de compilar, no es realmente un método para "proteger" o "esconder" estos datos privados, si no una herramienta o convención de diseño que se verifica al momento de compilar para que el programador mantenga el código controlado y qué estas variables no sean modificadas en momentos inadecuados o en ciertos fragmentos de código, como una herramienta de control de acceso y mantenimiento de variables. Es decir entonces que a pesar que `secret1`, `secret2` y `secret3` estuvieran encapsulados, se puede acceder a ellos al encontrar su dirección de memoria y el dato que almacenan. Entonces ahora sé que puedo leer datos encapsulados mediante punteros y manipulación directa de la memoria en C++, ahora me queda la duda...
+
+
+>Durante la ejecución del programa, se logró acceder exitosamente a los valores de los atributos secret1, secret2 y secret3, a pesar de estar declarados como private dentro de la clase. Esto se logró utilizando punteros junto con conversiones de tipo (reinterpret_cast) para navegar por la memoria interna del objeto. De este modo, fue posible obtener la dirección de memoria donde se almacenan estos miembros y leer directamente los datos, sin necesidad de utilizar ningún método público o interfaz de acceso.
+>
+>Este resultado confirma que, en C++, el encapsulamiento no impide técnicamente el acceso a los atributos privados en tiempo de ejecución, siempre que se tenga control sobre los punteros y conocimiento del layout de memoria del objeto. Aunque el compilador prohíbe el acceso directo a través de código fuente convencional, no hay una protección real en la ejecución que impida leer (o incluso modificar) estos datos a través de manipulación de memoria.
+>
+>Este experimento revela una diferencia fundamental entre la abstracción de acceso proporcionada por el lenguaje y la realidad de la implementación en memoria. En C++, el encapsulamiento se comporta más como una convención de diseño verificada en tiempo de compilación que como una medida efectiva de protección en tiempo de ejecución. Su propósito principal es permitir al programador controlar el acceso y modificación de ciertos datos para mantener la coherencia del objeto y evitar errores lógicos, más que ocultar los datos de forma segura.
+>
+>La posibilidad de acceder a datos privados mediante punteros plantea implicaciones importantes: por un lado, evidencia la potencia y flexibilidad del lenguaje; por otro, demuestra lo fácil que es romper las garantías de diseño orientado a objetos cuando se abusa de herramientas de bajo nivel. Esta capacidad puede ser útil para depuración, pero también representa un riesgo significativo en términos de mantenimiento, seguridad y portabilidad del código.
+>
+>Entonces, si bien secret1, secret2 y secret3 están correctamente encapsulados desde el punto de vista del lenguaje, esa encapsulación puede ser vulnerada mediante técnicas que manipulan directamente la memoria del objeto. Esto refuerza la idea de que, en C++, la seguridad del encapsulamiento es relativa y depende del respeto a las abstracciones por parte del programador.
+
 ### ¿Puedo acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria en C#?
 
 ### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
@@ -402,10 +418,13 @@ Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible a
 ### ¿Cómo se pueden leer campos privados heredados?
 
 
-
+---
 Pero para esto primero quiero investigar y entender
 #### ¿Cómo funciona la herencia en términos de memoria?
 
+
+
+---
 
 
 ### ¿
@@ -417,11 +436,6 @@ Pero para esto primero quiero investigar y entender
 
 
 > "Existen diversas técnicas que permiten a un atacante acceder a estos datos mientras o poco después de que el programa se está ejecutando. Una de las más comunes es el volcado de memoria en tiempo de ejecución, donde el atacante utiliza herramientas como gcore, ProcDump, gdb o debuggers para capturar el contenido de la RAM asociada al proceso activo. En ese volcado, pueden buscarse directamente cadenas de texto o patrones que revelen contraseñas almacenadas en variables como std::string o buffers de caracteres. Otra técnica es el análisis post-mortem, que aprovecha el hecho de que, al cerrar un programa, la memoria no se borra instantáneamente, por lo que fragmentos de datos sensibles podrían permanecer accesibles hasta que el sistema los sobrescriba. En casos extremos, se han documentado ataques físicos como el Cold Boot Attack, donde se extrae la memoria RAM de un equipo recién apagado y se congela para mantener temporalmente su contenido, permitiendo su lectura en otro sistema."
-
-
-
-> Aquí documentas cada ciclo de pregunta -> hipótesis -> experimento -> hallazgo -> reflexión.
-> Debe ser rico en evidencia visual (código, capturas del depurador con anotaciones, diagramas).
 
 Conclusiones:
 
