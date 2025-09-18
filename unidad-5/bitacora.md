@@ -392,31 +392,244 @@ int main() {
 ``` 
 <img width="1564" height="912" alt="image" src="https://github.com/user-attachments/assets/d6b520c2-1fd4-4fc1-9c33-8ccaecd494a8" />
 
-Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible acceder a estos datos que, en teoría, son secretos o ocultos (según el acceso definido por el modificador `private`). Esto quiere decir que el encapsulamiento, aunque sea muy estricto al momento de compilar, no es realmente un método para "proteger" o "esconder" estos datos privados, si no una herramienta o convención de diseño que se verifica al momento de compilar para que el programador mantenga el código controlado y qué estas variables no sean modificadas en momentos inadecuados o en ciertos fragmentos de código, como una herramienta de control de acceso y mantenimiento de variables. Es decir entonces que a pesar que `secret1`, `secret2` y `secret3` estuvieran encapsulados, se puede acceder a ellos al encontrar su dirección de memoria y el dato que almacenan. Entonces ahora sé que puedo leer datos encapsulados mediante punteros y manipulación directa de la memoria en C++, ahora me queda la duda...
+Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible acceder a estos datos que, en teoría, son secretos o ocultos (según el acceso definido por el modificador `private`). Esto quiere decir que el encapsulamiento, aunque sea muy estricto al momento de compilar, no es realmente un método para "proteger" o "esconder" estos datos privados, si no una herramienta o convención de diseño que se verifica al momento de compilar para que el programador mantenga el código controlado y qué estas variables no sean modificadas en momentos inadecuados o en ciertos fragmentos de código, como una herramienta de control de acceso y mantenimiento de variables. Es decir entonces que a pesar que `secret1`, `secret2` y `secret3` estuvieran encapsulados, se puede acceder a ellos al encontrar su dirección de memoria y el dato que almacenan. Entonces ahora sé que puedo leer datos encapsulados mediante punteros y manipulación directa de la memoria en C++.
 
 
->Durante la ejecución del programa, se logró acceder exitosamente a los valores de los atributos secret1, secret2 y secret3, a pesar de estar declarados como private dentro de la clase. Esto se logró utilizando punteros junto con conversiones de tipo (reinterpret_cast) para navegar por la memoria interna del objeto. De este modo, fue posible obtener la dirección de memoria donde se almacenan estos miembros y leer directamente los datos, sin necesidad de utilizar ningún método público o interfaz de acceso.
+>Durante la ejecución del programa, se logró acceder exitosamente a los valores de los atributos secret1, secret2 y secret3, a pesar de estar declarados como private dentro de la clase. Esto li logramos utilizando punteros junto con conversiones de tipo (reinterpret_cast) para navegar por la memoria interna del objeto. De este modo, fue posible obtener la dirección de memoria donde se almacenan la informacóni y leer directamente los datos.
 >
->Este resultado confirma que, en C++, el encapsulamiento no impide técnicamente el acceso a los atributos privados en tiempo de ejecución, siempre que se tenga control sobre los punteros y conocimiento del layout de memoria del objeto. Aunque el compilador prohíbe el acceso directo a través de código fuente convencional, no hay una protección real en la ejecución que impida leer (o incluso modificar) estos datos a través de manipulación de memoria.
->
->Este experimento revela una diferencia fundamental entre la abstracción de acceso proporcionada por el lenguaje y la realidad de la implementación en memoria. En C++, el encapsulamiento se comporta más como una convención de diseño verificada en tiempo de compilación que como una medida efectiva de protección en tiempo de ejecución. Su propósito principal es permitir al programador controlar el acceso y modificación de ciertos datos para mantener la coherencia del objeto y evitar errores lógicos, más que ocultar los datos de forma segura.
->
->La posibilidad de acceder a datos privados mediante punteros plantea implicaciones importantes: por un lado, evidencia la potencia y flexibilidad del lenguaje; por otro, demuestra lo fácil que es romper las garantías de diseño orientado a objetos cuando se abusa de herramientas de bajo nivel. Esta capacidad puede ser útil para depuración, pero también representa un riesgo significativo en términos de mantenimiento, seguridad y portabilidad del código.
->
->Entonces, si bien secret1, secret2 y secret3 están correctamente encapsulados desde el punto de vista del lenguaje, esa encapsulación puede ser vulnerada mediante técnicas que manipulan directamente la memoria del objeto. Esto refuerza la idea de que, en C++, la seguridad del encapsulamiento es relativa y depende del respeto a las abstracciones por parte del programador.
+>Este resultado confirma que, en C++, el encapsulamiento no impide técnicamente el acceso a los atributos privados en tiempo de ejecución, siempre que se tenga control sobre los punteros y conocimiento de la memoria del objeto. Aunque el compilador prohíbe el acceso directo a través de código fuente, no hay una protección real en la ejecución que impida leer estos datos a través de manipulación de memoria.
+
+>[!CAUTION]
+>En C++, el encapsulamiento se comporta más como una convención de diseño verificada en tiempo de compilación que como una medida efectiva de protección en tiempo de ejecución. Su propósito principal es permitir al programador controlar el acceso y modificación de ciertos datos para mantener la coherencia del objeto y evitar errores lógicos, más que ocultar los datos de forma segura.
+
+
+>Entonces, si bien secret1, secret2 y secret3 están correctamente encapsulados desde el punto de vista del lenguaje, esa encapsulación puede ser vulnerada mediante técnicas que manipulan directamente la memoria del objeto. Esto refuerza la idea de que, en C++, la "seguridad" del encapsulamiento es relativa.
 
 ### ¿Puedo acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria en C#?
 
+Sospecho que en C# no es tan sencillo como en C++, porque la memoria está administrada por el CLR y además C# no deja trabajar con punteros desde lo que yo sé. Aun así, pienso que sí se puede “romper” el encapsulamiento usando mecanismos avanzados para leer esos valores privados.
+
+```C#
+class MyClass {
+    private int secret = 42;
+    public int visible = 7;
+}
+
+class Program {
+    static void Main() {
+        MyClass obj = new MyClass();
+        // Console.WriteLine(obj.secret); //  Error de compilación
+        Console.WriteLine(obj.visible);   // Esto sí funciona
+    }
+}
+```
+
+El compilador no me deja acceder a secret porque es privado.
+
+Investigando en internet, aprendí que no se usan punteros porque hay que usar algo llamado "unsafe", y como su nombre indica no es como lo mejor para el código. Sin embargo econtré "Reflection", que según stacktify:
+
+>"Llamamos "reflection" a la capacidad que tienen algunos lenguajes de programación de inspeccionar dinámicamente sus propias construcciones. Mediante la reflexión, se puede, por ejemplo, cargar dinámicamente una clase desde un ensamblado, comprobar si un tipo dado tiene un miembro específico e incluso crear código dinámicamente.
+>
+>Para comprender la reflexión en C#, hay algunos conceptos básicos que debe comprender sobre la jerarquía de sus construcciones de programación:
+>
+>- Los conjuntos contienen módulos
+>- Los módulos contienen tipos
+>- Los tipos contienen miembros"
+
+También mencionaron el "principio del ocultamiento" que también tuve que investigar porque no sabía que era:
+>"El principio de ocultación en programación orientada a objetos (POO) se refiere a la técnica de esconder los detalles internos y la implementación de un objeto, exponiendo solo una interfaz pública (métodos) para interactuar con él. Esto se logra mediante la restricción del acceso directo a sus atributos, permitiendo su modificación solo a través de los métodos definidos por la propia clase. La ocultación protege la integridad de los datos, mejora la mantenibilidad del código y garantiza la seguridad al prevenir manipulaciones no autorizadas."
+
+
+
+Probando con Reflection:
+
+```C#
+using System;
+using System.Reflection;
+
+class MyClass {
+    private int secret = 42;
+    public int visible = 7;
+}
+
+
+class Program {
+    static void Main() {
+        MyClass obj = new MyClass();
+
+        FieldInfo campo = typeof(MyClass).GetField("secret", BindingFlags.NonPublic | BindingFlags.Instance);
+        int valor = (int)campo.GetValue(obj);
+
+        Console.WriteLine("Valor del campo privado: " + valor);
+    }
+}
+```
+
+```C#
+FieldInfo campo = typeof(MyClass).GetField("secret", BindingFlags.NonPublic | BindingFlags.Instance);
+```
+
+-`typeof(MyClass)` : le digo que quiero la metadata de la clase MyClass.
+
+-`.GetField("secret", ...)` : le pido específicamente el campo llamado "secret".
+
+- `BindingFlags.NonPublic | BindingFlags.Instance` :  banderas para buscar campos que no son públicos y que pertenecen a instancias (objetos) de la clase, no a campos estáticos
+
+Al igual que en C++, el compilador de C# protege el encapsulamiento solo durante la compilación. Al final confirmé que sí se pueden leer y hasta modificar variables privadas en C#, pero no usando punteros ni manipulando memoria directamente como en C++. Aquí la forma más “clásica” es con Reflection, que aprovecha la metadata del objeto para acceder a información que en teoría está oculta.
+
+Esto demuestra que en C# el encapsulamiento tampoco es una barrera absoluta. Sirve principalmente como una convención de diseño y seguridad en tiempo de compilación, no como una garantía en tiempo de ejecución. Técnicamente se pueden exponer los valores privados, pero hacerlo rompe el principio de ocultamiento (que encontré en internet) y puede causar problemas de mantenimiento. En conclusión, sí se puede acceder a los atributos privados en C#, pero no con punteros directos como en C++, sino mediante Reflection u otras técnicas avanzadas que saltan la verificación del compilador.
+
 ### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
 
+Pienso que sí se podría, porque ya vi que en C++ es posible leer campos privados con punteros y conversión de tipos. Si puedo encontrar la dirección de memoria del atributo privado, también debería poder escribir en ella y modificar su valor directamente, sin usar los métodos de la clase.
 
+>El código inicial lo generó la IA.
+
+```C++
+// Código inicial generado por la IA
+#include <iostream>
+
+class MyClass {
+private:
+    int secret1;
+    float secret2;
+
+public:
+    MyClass(int s1, float s2) : secret1(s1), secret2(s2) {}
+
+    void printMembers() const {
+        std::cout << "secret1: " << secret1 << "\n";
+        std::cout << "secret2: " << secret2 << "\n";
+    }
+};
+
+int main() {
+    MyClass obj(42, 3.14f);
+
+    std::cout << "Valores iniciales:\n";
+    obj.printMembers();
+
+    return 0;
+}
+```
+
+Mi idea en general es:
+- Obtener la dirección en memoria del objeto obj.
+- Tratar esa dirección como un puntero hacia el primer campo (asumo que secret1 está primero).
+- Avanzar en memoria para llegar al segundo campo (secret2).
+- Escribir nuevos bytes en esas direcciones para modificar los valores privados.
+- Volver a llamar a printMembers() y verificar que cambió.
+
+```C++
+#include <iostream>
+
+class MyClass {
+private:
+    int secret1;
+    float secret2;
+
+public:
+    MyClass(int s1, float s2) : secret1(s1), secret2(s2) {}
+
+    void printMembers() const {
+        std::cout << "secret1: " << secret1 << "\n";
+        std::cout << "secret2: " << secret2 << "\n";
+    }
+};
+
+int main() {
+    MyClass obj(42, 3.14f);
+
+    std::cout << "Valores iniciales:\n";
+    obj.printMembers();
+
+    // trato la memoria del objeto como punteros
+    int* ptrSecret1 = reinterpret_cast<int*>(&obj);
+    // primer miembro es secret1 (int)
+
+    float* ptrSecret2 = reinterpret_cast<float*>(ptrSecret1 + 1);
+    // después del int viene el float
+
+    // modifico directamente en memoria
+    *ptrSecret1 = 100;
+    *ptrSecret2 = 6.28f;
+
+    std::cout << "\nValores modificados:\n";
+    obj.printMembers();
+
+    return 0;
+}
+```
+
+Funciona, pero luego investigando más y preguntandole a la IA sugirió esta alternativa:
+```C#
+#include <iostream>
+#include <cstring> // para memcpy
+
+class MyClass {
+private:
+    int secret1;
+    float secret2;
+
+public:
+    MyClass(int s1, float s2) : secret1(s1), secret2(s2) {}
+
+    void printMembers() const {
+        std::cout << "secret1: " << secret1 << "\n";
+        std::cout << "secret2: " << secret2 << "\n";
+    }
+};
+
+int main() {
+    MyClass obj(42, 3.14f);
+
+    std::cout << "Antes:\n";
+    obj.printMembers();
+
+    // convierto el objeto a bytes
+    unsigned char* raw = reinterpret_cast<unsigned char*>(&obj);
+
+    int newSecret1 = 200;
+    float newSecret2 = 9.81f;
+
+    // copio los valores en memoria
+    std::memcpy(raw + 0, &newSecret1, sizeof(newSecret1));
+    std::memcpy(raw + sizeof(newSecret1), &newSecret2, sizeof(newSecret2));
+
+    std::cout << "\nDespués (con memcpy):\n";
+    obj.printMembers();
+
+    return 0;
+}
+```
+
+La IA me mostró otra forma, usando memcpy. Entendí que aquí se trabaja sobre los bytes crudos del objeto y se copian nuevos valores en las posiciones donde están los campos privados. Aprendí que esto evita un poco los problemas de aliasing, pero igual depende del layout en memoria que defina el compilador.
+
+Al principio probé con la técnica de los punteros y reinterpret_cast, asumiendo que los campos privados estarían en memoria uno detrás del otro. Eso me permitió modificar directamente los valores internos de la clase sin necesidad de un método público. El experimento funcionó, pero entendí que dependía mucho del orden y la forma en que el compilador organiza los datos.
+
+Después consulté con la IA y encontré la alternativa de usar memcpy. Con este método vi que en lugar de manipular punteros a tipos, se trabaja con la memoria en bruto del objeto (bytes) y se copian los nuevos valores en las posiciones correctas. Esto me enseñó que existen varias formas de alterar campos privados y que, aunque ambas funcionan, ninguna es completamente segura porque siguen dependiendo del layout interno definido por el compilador.
+
+Mi hallazgo principal es que en C++ sí se puede modificar un campo privado aunque la clase no lo permita de forma directa, pero hacerlo rompe el principio de encapsulación y puede causar comportamientos indefinidos. Aun así, el ejercicio me sirvió para entender mejor cómo se representa un objeto en memoria y qué tan débil o como facilmente ignorable puede ser la frontera entre lo público y lo privado en C++.
 
 ### ¿Existen otras formas para acceder a la memoria y copiar datos privados antes de compilar en C++?
 
+Yo pensé que tal vez sí existían formas de hacerlo, porque en teoría uno podría “leer memoria” desde el compilador o algo parecido. Mi idea inicial era que, así como con punteros se puede en tiempo de ejecución, quizás había alguna técnica para “espiar” los datos privados antes de que el programa corriera.
 
+Buscando en internet y también con ayuda de la IA, encontré que se mencionaban cosas como *macros*, *flags del compilador* o *plantillas*. Yo realmente no sabía qué era cada cosa, pero lo entendí más o menos así:  
+
+- > **Macros**: instrucciones que el preprocesador sustituye antes de compilar, como un “buscar y reemplazar” en el código.  
+- > **Flags del compilador**: configuraciones que se activan al compilar para cambiar el comportamiento del compilador.  
+- > **Plantillas**: estructuras que permiten generar código genérico y flexible según el tipo de dato.  
+- > **Friend**: palabra clave en C++ que permite que otra clase o función pueda acceder a los miembros privados de una clase.  
+
+La IA me sugirió que esas son formas de modificar el acceso, pero entendí que en realidad no es “copiar memoria antes de compilar”, sino más bien cambiar las reglas de acceso durante la compilación.  
+Lo que encontré es que no existe forma real de acceder a esos datos antes de compilar, porque antes de compilar los objetos todavía no existen en memoria. Es decir, no hay direcciones de memoria que contengan esos atributos, ya que eso solo ocurre cuando el programa está corriendo. Lo más que se puede hacer en compilación es jugar con friend, macros o plantillas para “abrir” el acceso, pero eso no es manipular la memoria directamente sino modificar el código.
+
+Esto me hizo entender que el acceso por memoria solo es posible en tiempo de ejecución, cuando el objeto realmente está almacenado en la RAM. El compilador únicamente aplica reglas de encapsulamiento y genera el binario, pero no guarda datos privados de objetos porque todavía no existen. Así que mi hipótesis inicial era incorrecta: no se pueden copiar ni leer atributos privados antes de compilar en C++, porque simplemente no hay memoria del objeto todavía.
 
 ### ¿Cómo se pueden leer campos privados heredados?
 
+Yo pensaba que, al heredar una clase, los campos privados del padre simplemente desaparecían para la clase hija y que solo se mantenían los protegidos y los públicos. Mi idea inicial era que no habría forma de leer esos privados heredados porque “no están” en el hijo.
 
 ---
 Pero para esto primero quiero investigar y entender
