@@ -3,10 +3,6 @@
 ---
 Bitacora :
 
-<a name="exp1"></a>
-Mi experimento x:
-
-<img width="1564" height="912" alt="image" src="https://github.com/user-attachments/assets/ed5a7084-c45a-4626-897b-dd36b14c1b9e" /># Bitácora de aprendizaje de la unidad 5
 
 ## 1.  **Diagnóstico inicial**
 ---
@@ -700,7 +696,7 @@ Criterio 1: profundidad de la indagación
 Mi autoevaluación: 5 Siento que logré una profundidad significativa en la indagación porque no solo exploré el encapsulamiento que era el tema del cual mas deseaba entender, sino también cómo funciona a nivel de implementación, memoria y límites en distintos lenguajes. Por ejemplo exploré técnicas como reinterpret_cast, memcpy, reflection, y comparé entre C++ y C#
 
 Evidencias: 
->“Aunque los atributos privados de una clase no pueden ser accedidos directamente mediante el uso ‘normal’ de C++, … es posible que, al manipular directamente la memoria del objeto … se pueda acceder a la información almacenada en dichos atributos.” Por ejemplo: en el [experimento X](#exp1) se demuestra... porque ...
+>“Aunque los atributos privados de una clase no pueden ser accedidos directamente mediante el uso ‘normal’ de C++, … es posible que, al manipular directamente la memoria del objeto … se pueda acceder a la información almacenada en dichos atributos.” }
 
 >"El compilador no me deja acceder a secret porque es privado.
 
@@ -772,17 +768,3 @@ Evidencias:
 
 ---
 
-# Bitácora de aprendizaje de la unidad 5
-
-
-## 1.  **Diagnóstico inicial**
-
-## 2.  **La pregunta inicial**
-
-## 3.  **Registro de exploración:** 
-> Aquí documentas cada ciclo de pregunta -> hipótesis -> experimento -> hallazgo -> reflexión.
-> Debe ser rico en evidencia visual (código, capturas del depurador con anotaciones, diagramas).
-
-## 4.  **Consolidación, autoevaluación y cierre:**
-> [!CAUTION]
-> Esta sección es OBLIGATORIA y central para tu evaluación
