@@ -175,7 +175,10 @@ Escogí esta pregunta ya que me interesa entender los límites del programa y qu
 > Aquí documentas cada ciclo de pregunta -> hipótesis -> experimento -> hallazgo -> reflexión.
 > Debe ser rico en evidencia visual (código, capturas del depurador con anotaciones, diagramas).
 
+
 Antes de proceder con el experimento 04 para resolver la pregunta inicial, primero exploraré la aplicación de la actividad 02 para explorar la generalidad de estos conceptos de POO:
+
+<a name="act02"></a>
 
 El programa del experimento 2 básicamente hace como un simulador de fuegos artificiales con partículas.  
 La idea general es que hay una partícula principal (`RisingParticle`) que aparece en la parte de abajo de la pantalla, va subiendo con una velocidad y tiene un tiempo de vida. Cuando llega al límite o se le acaba el tiempo, explota y de ahí salen otras partículas.  
@@ -288,6 +291,8 @@ Queda claro tan solo con este ejemplo como se aplica el concepto de Herencia en 
 Ahora, trabajaré la pregunta inicial:
 
 ### ¿Es posible acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria?
+
+<a name="exp1"></a>
 
 Aunque los atributos privados de una clase no pueden ser accedidos directamente mediante el uso "normal" de C++, como el acceso directo desde fuera de la clas, es posible que, al manipular directamente la memoria del objeto (por ejemplo, mediante punteros y elementos desde este tipo), se pueda acceder a la información almacenada en dichos atributos. Esto implicaría que el encapsulamiento en lenguajes como C++ no es una protección real en tiempo de ejecución, sino una verificación proporcionada por el compilador, la cual puede ser ignorada si se trabaja a bajo nivel.
 
@@ -411,6 +416,8 @@ Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible a
 
 ### ¿Puedo acceder a atributos privados de una clase mediante punteros o manipulación directa de memoria en C#?
 
+<a name="exp2"></a>
+
 Sospecho que en C# no es tan sencillo como en C++, porque la memoria está administrada por el CLR y además C# no deja trabajar con punteros desde lo que yo sé. Aun así, pienso que sí se puede “romper” el encapsulamiento usando mecanismos avanzados para leer esos valores privados.
 
 ```C#
@@ -491,6 +498,8 @@ Al igual que en C++, el compilador de C# protege el encapsulamiento solo durante
 Esto demuestra que en C# el encapsulamiento tampoco es una barrera absoluta. Sirve principalmente como una convención de diseño y seguridad en tiempo de compilación, no como una garantía en tiempo de ejecución. Técnicamente se pueden exponer los valores privados, pero hacerlo rompe el principio de ocultamiento (que encontré en internet) y puede causar problemas de mantenimiento. En conclusión, sí se puede acceder a los atributos privados en C#, pero no con punteros directos como en C++, sino mediante Reflection u otras técnicas avanzadas que saltan la verificación del compilador.
 
 ### ¿Puedo modificar un campo privado aunque la clase no proporcione ningún método para hacerlo?
+
+<a name="exp3"></a>
 
 Pienso que sí se podría, porque ya vi que en C++ es posible leer campos privados con punteros y conversión de tipos. Si puedo encontrar la dirección de memoria del atributo privado, también debería poder escribir en ella y modificar su valor directamente, sin usar los métodos de la clase.
 
@@ -574,6 +583,7 @@ int main() {
 ```
 <img width="1571" height="992" alt="image" src="https://github.com/user-attachments/assets/6f712eeb-c61f-40c4-8b43-ce38b0c7d53b" />
 
+<a name="exp4"></a>
 
 Funciona, pero luego investigando más y preguntandole a la IA sugirió esta alternativa:
 ```C++
@@ -650,6 +660,8 @@ Esto me hizo entender que el acceso por memoria solo es posible en tiempo de eje
 
 ### ¿Cómo se pueden leer campos privados heredados?
 
+<a name="exp5"></a>
+
 Yo pensaba que, al heredar una clase, los campos privados del padre simplemente desaparecían para la clase hija y que solo se mantenían los protegidos y los públicos. Mi idea inicial era que no habría forma de leer esos privados heredados porque “no están” en el hijo.
 
 ---
@@ -666,6 +678,8 @@ Pero para esto primero quiero investigar y entender
 
 
 ### ¿Cómo puedo acceder a datos privados mientras el programa se está ejecutando?
+
+<a name="exp6"></a>
 
 > "Existen diversas técnicas que permiten a un atacante acceder a estos datos mientras o poco después de que el programa se está ejecutando. Una de las más comunes es el volcado de memoria en tiempo de ejecución, donde el atacante utiliza herramientas como gcore, ProcDump, gdb o debuggers para capturar el contenido de la RAM asociada al proceso activo. En ese volcado, pueden buscarse directamente cadenas de texto o patrones que revelen contraseñas almacenadas en variables como std::string o buffers de caracteres. Otra técnica es el análisis post-mortem, que aprovecha el hecho de que, al cerrar un programa, la memoria no se borra instantáneamente, por lo que fragmentos de datos sensibles podrían permanecer accesibles hasta que el sistema los sobrescriba. En casos extremos, se han documentado ataques físicos como el Cold Boot Attack, donde se extrae la memoria RAM de un equipo recién apagado y se congela para mantener temporalmente su contenido, permitiendo su lectura en otro sistema."
 
@@ -696,8 +710,11 @@ Criterio 1: profundidad de la indagación
 Mi autoevaluación: 5 Siento que logré una profundidad significativa en la indagación porque no solo exploré el encapsulamiento que era el tema del cual mas deseaba entender, sino también cómo funciona a nivel de implementación, memoria y límites en distintos lenguajes. Por ejemplo exploré técnicas como reinterpret_cast, memcpy, reflection, y comparé entre C++ y C#
 
 Evidencias: 
+> Como se muestra en el [experimento 1](#exp1): 
 >“Aunque los atributos privados de una clase no pueden ser accedidos directamente mediante el uso ‘normal’ de C++, … es posible que, al manipular directamente la memoria del objeto … se pueda acceder a la información almacenada en dichos atributos.” }
+>“Esta protección mientras el programa se ejecuta o se compila, o también podría no estar declarado según quién lo llame.”
 
+> Como se muestra en el [experimento 2](#exp2):  
 >"El compilador no me deja acceder a secret porque es privado.
 
 >Investigando en internet, aprendí que no se usan punteros porque hay que usar algo llamado "unsafe", y como su nombre indica no es como lo mejor para el código. Sin embargo econtré "Reflection", que según stacktify:
@@ -715,40 +732,54 @@ Evidencias:
 
 >“Investigando en internet, aprendí que … no se usan punteros porque hay que usar algo llamado ‘unsafe’ … Sin embargo encontré Reflection …”
 
->“Esta protección mientras el programa se ejecuta o se compila, o también podría no estar declarado según quién lo llame.”
+>“En C#, el compilador de C# protege el encapsulamiento solo durante la compilación. Al final confirmé que sí se pueden leer y hasta modificar variables privadas en C#, pero no usando punteros ni manipulando memoria directamente como en C++. Aquí la forma más “clásica” es con Reflection …”
 
+> Como se muestra en el [experimento 5](#exp5):  
 >“Yo pensé que, al heredar una clase, los campos privados del padre simplemente desaparecían para la clase hija …”
 
->“En C#, el compilador de C# protege el encapsulamiento solo durante la compilación. Al final confirmé que sí se pueden leer y hasta modificar variables privadas en C#, pero no usando punteros ni manipulando memoria directamente como en C++. Aquí la forma más “clásica” es con Reflection …”
+
 
 Criterio 2: esfuerzo cognitivo y experimentación
 
 Mi autoevaluación: Diría que 5. Creo que puse mucho esfuerzo cognitivo porque no me quedé en teoría, hice varios experimentos, probé diferentes técnicas, tomé riesgos técnicos, documenté resultados y errores, y cambié hipótesis cuando las pruebas mostraron otra cosa.
+
 Evidencias: Los diferentes códigos y el avance y experimentación.
 
->"Sin embargo, al descomentar las líneas, el código no compila. El motivo es intuitivo, a pesar de tener la misma sintaxis e intención que la línea anterior (ac.publicVar = 10;), el programa no se ejecuta debido al tipo de encapsulamiento de estas variables. publicVar se podía modificar desde el main ya que es una variable pública, una variable que básicamente se puede acceder durante y en cualquier parte del programa, en cambio, protectedVar y privateVar no se pueden modificar o leer desde el main ya que fueron declaradas como variables protegida y privada respectivamente."
-
+> Como se muestra en la [Actividad 02](#act02):  
 >"En esta parte del código podemos ver el concepto de herencia y creo que también de encapsulamiento. Ya que la clase RisingParticle hereda las cosas que tiene Particle, además de agregar otras cosas. También aparece el encapsulamiento porque las variables (position, velocity, etc.) son protected, o sea que no cualquiera puede acceder a ellas directamente. Si necesito esos datos, hay métodos como getPosition() o getColor()."
+
+> Como se muestra en el [experimento 4](#exp4):  
+>"Sin embargo, al descomentar las líneas, el código no compila. El motivo es intuitivo, a pesar de tener la misma sintaxis e intención que la línea anterior (ac.publicVar = 10;), el programa no se ejecuta debido al tipo de encapsulamiento de estas variables. publicVar se podía modificar desde el main ya que es una variable pública, una variable que básicamente se puede acceder durante y en cualquier parte del programa, en cambio, protectedVar y privateVar no se pueden modificar o leer desde el main ya que fueron declaradas como variables protegida y privada respectivamente."
 
 >“Después consulté con la IA y encontré la alternativa de usar memcpy. En este método vi que en lugar de manipular punteros a tipos, se trabaja con la memoria en bruto del objeto (bytes) y se copian los nuevos valores en las posiciones donde están los campos privados.”
 
+> Como se muestra en el [experimento 3](#exp3) y en el [experimento 4](#exp4):  
 >“Mi hallazgo principal es que en C++ sí se puede modificar un campo privado aunque la clase no lo permita de forma directa, pero hacerlo rompe el principio de encapsulación y puede causar comportamientos indefinidos.” — experimentaste y comprobaste efectos.
 
+> Como se muestra en el [experimento 3](#exp3):  
 >“Este ejercicio me sirvió para entender mejor cómo se representa un objeto en memoria y qué tan débil o como fácilmente ignorable puede ser la frontera entre lo público y lo privado en C++.”
 
 Criterio 3: calidad del análisis y la reflexión
 
 Mi autoevaluación: Me ubico en el 5. Siento que mi análisis no fue solo técnico, sino que reflexioné sobre lo que esos experimentos implican para el diseño de software, buenas prácticas, seguridad y teoría. No solo hice que el código funcionara, sino que pensé qué significa que el encapsulamiento pueda violarse, si eso está bien, cuándo podría ser un problema, etc.
+
 Evidencias: 
->"Al principio probé con la técnica de los punteros y reinterpret_cast, asumiendo que los campos privados estarían en memoria uno detrás del otro. Eso me permitió modificar directamente los valores internos de la clase sin necesidad de un método público. El experimento funcionó, pero entendí que dependía mucho del orden y la forma en que el compilador organiza los datos.
 
->"Después consulté con la IA y encontré la alternativa de usar memcpy. Con este método vi que en lugar de manipular punteros a tipos, se trabaja con la memoria en bruto del objeto (bytes) y se copian los nuevos valores en las posiciones correctas. Esto me enseñó que existen varias formas de alterar campos privados y que, aunque ambas funcionan, ninguna es completamente segura porque siguen dependiendo del layout interno definido por el compilador."
-
->"Mi hallazgo principal es que en C++ sí se puede modificar un campo privado aunque la clase no lo permita de forma directa, pero hacerlo rompe el principio de encapsulación y puede causar comportamientos indefinidos. Aun así, el ejercicio me sirvió para entender mejor cómo se representa un objeto en memoria y qué tan débil o como facilmente ignorable puede ser la frontera entre lo público y lo privado en C++."
-
+> Como se muestra en el [experimento 1](#exp1):  
 >"Finalmente el código ejecuta, y mediante el uso de punteros se vuelve posible acceder a estos datos que, en teoría, son secretos o ocultos (según el acceso definido por el modificador `private`). Esto quiere decir que el encapsulamiento, aunque sea muy estricto al momento de compilar, no es realmente un método para "proteger" o "esconder" estos datos privados, si no una herramienta o convención de diseño que se verifica al momento de compilar para que el programador mantenga el código controlado y qué estas variables no sean modificadas en momentos inadecuados o en ciertos fragmentos de código, como una herramienta de control de acceso y mantenimiento de variables. Es decir entonces que a pesar que `secret1`, `secret2` y `secret3` estuvieran encapsulados, se puede acceder a ellos al encontrar su dirección de memoria y el dato que almacenan. Entonces ahora sé que puedo leer datos encapsulados mediante punteros y manipulación directa de la memoria en C++."
 
+> Como se muestra en el [experimento 3](#exp3):  
+>"Al principio probé con la técnica de los punteros y reinterpret_cast, asumiendo que los campos privados estarían en memoria uno detrás del otro. Eso me permitió modificar directamente los valores internos de la clase sin necesidad de un método público. El experimento funcionó, pero entendí que dependía mucho del orden y la forma en que el compilador organiza los datos.
+
 >"Esto me hizo entender que el acceso por memoria solo es posible en tiempo de ejecución, cuando el objeto realmente está almacenado en la RAM. El compilador únicamente aplica reglas de encapsulamiento y genera el binario, pero no guarda datos privados de objetos porque todavía no existen. Así que mi hipótesis inicial era incorrecta: no se pueden copiar ni leer atributos privados antes de compilar en C++, porque simplemente no hay memoria del objeto todavía."
+
+> Como se muestra en el [experimento 3](#exp3) y en el [experimento 4](#exp4):  
+>"Mi hallazgo principal es que en C++ sí se puede modificar un campo privado aunque la clase no lo permita de forma directa, pero hacerlo rompe el principio de encapsulación y puede causar comportamientos indefinidos. Aun así, el ejercicio me sirvió para entender mejor cómo se representa un objeto en memoria y qué tan débil o como facilmente ignorable puede ser la frontera entre lo público y lo privado en C++."
+
+
+> Como se muestra en el [experimento 4](#exp4):  
+>"Después consulté con la IA y encontré la alternativa de usar memcpy. Con este método vi que en lugar de manipular punteros a tipos, se trabaja con la memoria en bruto del objeto (bytes) y se copian los nuevos valores en las posiciones correctas. Esto me enseñó que existen varias formas de alterar campos privados y que, aunque ambas funcionan, ninguna es completamente segura porque siguen dependiendo del layout interno definido por el compilador."
+
 
 Criterio 4: apropiación y articulación de conceptos
 
@@ -756,12 +787,14 @@ Mi autoevaluación: demuestro mi apropiación en el nivel 5 porque siento que de
 
 Evidencias: 
 
+> Como se muestra en la [Actividad 02](#act02):  
 >"El encapsulamiento es un principio de POO donde se "encapsulan" o "encierran" los métodos y atributos en las clases para darles cierto grado de seguridad o privacidad dentro del programa, restringiendo el acceso a ellas o a sus componentes. En el proyecto final de POO, donde debiamos desarrollar un sistema de veterinaria, fue muy util para poder manejar y definir los componentes que iban a ser privados ya que no queríamos que fueran cambiando o que se modificaran a lo largo de la ejecución, siento que nos dio más manejo general de las clases. También en general para el desarrollo en unity el uso de encapsulamiento en C# es muy útil cuando creamos programas o juegos donde es tan recomendable que un atributo pueda ser manejado por cualquier código o parte del código, y para poder controlarlo mejor."
 
 >"La herencia es un principio de POO donde una clase padre le hereda sus atributos y métodos a una clase hijo, existen distintos tipos de herencia y además una clase hijo puede ser la clase padre de otra clase. En general es demasiado útil para la optimización del código, nuevamente con nuesto trabajo de sistema de veterinaria fue muy útil porque aunque manejabamos distintos animales podiamos tener la clase "Animal" que tenía las caracteristicas generales que compartian todos los pacientes y ya eso lo heredaban clases más especificas entonces no teniamos que estar constantemente declarando nombre, edad, color, peso y otros atributos a todas las especies. También un caso que se mostró en nuestro programa, ya que lo desarrollamos en Unity, el uso de MonoBehaviour es un caso de herencia que Unity hace automaticamente y mucha gente no se da cuenta. Básicamente eso nos permitió acceder a todas las funcionalidades (métodos más que nada) del Monobehavior en todas las clases, como Awake(), Start(), Update(), entre otros. Esto hace el desarrollo en Unity muchisimo más facil."
 
 >"Queda claro tan solo con este ejemplo como se aplica el concepto de Herencia en la programación y su uso, siendo este un principio que nos permite "duplicar" o, aunque sea redundante, heredar los atributos y métodos de una clase padre a la clase hijo. Es demasiado útil ya que ahí tenemos las particulas, pero estamos creando distintos tipos. Si en cada tipo estuvieramos repitiendo y repitiendo los mismos atributos ya que son comunes entre todas las particulas, sería un código mal optimizado, repetitivo, díficil de leer y escribir. Es mucho más lógico emplear la herencia y encadenarla."
 
+> Como se muestra en el [experimento 1](#exp1) y en el [experimento 2](#exp2):  
 >"Este resultado confirma que, en C++, el encapsulamiento no impide técnicamente el acceso a los atributos privados en tiempo de ejecución, siempre que se tenga control sobre los punteros y conocimiento de la memoria del objeto. Aunque el compilador prohíbe el acceso directo a través de código fuente, no hay una protección real en la ejecución que impida leer estos datos a través de manipulación de memoria."
 
 >"Esto demuestra que en C# el encapsulamiento tampoco es una barrera absoluta. Sirve principalmente como una convención de diseño y seguridad en tiempo de compilación, no como una garantía en tiempo de ejecución. Técnicamente se pueden exponer los valores privados, pero hacerlo rompe el principio de ocultamiento (que encontré en internet) y puede causar problemas de mantenimiento. En conclusión, sí se puede acceder a los atributos privados en C#, pero no con punteros directos como en C++, sino mediante Reflection u otras técnicas avanzadas que saltan la verificación del compilador."
