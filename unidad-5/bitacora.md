@@ -797,6 +797,7 @@ Evidencias:
 > Como se muestra en el [experimento 1](#exp1) y en el [experimento 2](#exp2):  
 >"Este resultado confirma que, en C++, el encapsulamiento no impide técnicamente el acceso a los atributos privados en tiempo de ejecución, siempre que se tenga control sobre los punteros y conocimiento de la memoria del objeto. Aunque el compilador prohíbe el acceso directo a través de código fuente, no hay una protección real en la ejecución que impida leer estos datos a través de manipulación de memoria."
 
+> Como se muestra en el [experimento 2](#exp2):  
 >"Esto demuestra que en C# el encapsulamiento tampoco es una barrera absoluta. Sirve principalmente como una convención de diseño y seguridad en tiempo de compilación, no como una garantía en tiempo de ejecución. Técnicamente se pueden exponer los valores privados, pero hacerlo rompe el principio de ocultamiento (que encontré en internet) y puede causar problemas de mantenimiento. En conclusión, sí se puede acceder a los atributos privados en C#, pero no con punteros directos como en C++, sino mediante Reflection u otras técnicas avanzadas que saltan la verificación del compilador."
 
 ---
