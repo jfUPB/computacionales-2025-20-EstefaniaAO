@@ -1,5 +1,13 @@
 # Bitácora de aprendizaje de la unidad 6
 
+## Índice
+
+- [Actividad 01](#actividad-01)
+- [Actividad 02](#actividad-02)
+- [Actividad 03](#actividad-03)
+- [Actividad 04](#actividad-04)
+- [Actividad 05](#actividad-05)
+
 ## Actividad 01:
 
 ---
@@ -903,3 +911,31 @@ El cometa se acerca al cursor con más agresividad que otras partículas porque 
 
 La clave es que no tuve que escribir un if (tipo == comet) dentro de update(). El patrón State asegura que cada partícula use su mismo flujo de estados, y lo único que cambia son sus atributos iniciales (tamaño, color, velocidad). Esto cumple con el Principio Abierto/Cerrado (OCP): pude meter un nuevo tipo de partícula sin tocar nada en la clase Particle.
 
+
+---
+
+## Autoevaluación
+
+Nota: 5,0
+
+> Rúbrica de evaluación del proceso
+> 5: realicé las 5 actividades completas y la autoevaluación.
+> 4: realicé 4 actividades completas y la autoevaluación.
+> 3: realicé 3 actividades completas y la autoevaluación.
+> 2: realicé 2 actividades completas y la autoevaluación.
+> 1: realicé 1 actividad completa y la autoevaluación.
+> 0: no realicé ninguna actividad o no realicé la autoevaluación.
+
+Considero que mi calificación debe ser 5,0 porque realicé de manera completa, organizada y detallada todas las actividades propuestas. Todas están realizadas al 100%. A continuación justifico cada punto:
+
+[Actividad 01](#actividad-01) – Set: documenté todas las teclas (s, a, r, n) y describí con claridad lo que ocurre en pantalla con las partículas, explicando cómo cambian sus colores, tamaños y comportamientos. Además, registré observaciones como en una bitácora, mostrando lo que experimenté al ejecutar el programa.
+
+[Actividad 02](#actividad-02) – Observer: identifiqué correctamente el patrón Observer dentro del caso de estudio, señalando qué clase es el Subject (ofApp) y cuáles son los Observers (Particle). Expliqué cómo este patrón reduce el acoplamiento y facilita la extensibilidad del sistema, además de incluir un diagrama que representa las relaciones.
+
+[Actividad 03](#actividad-03) – Factory: analicé y expliqué el funcionamiento de la ParticleFactory, resaltando sus ventajas en la creación de diferentes tipos de partículas. Para demostrarlo, agregué un nuevo tipo de partícula (black_hole), lo que valida que comprendí cómo extender el patrón sin modificar la estructura central.
+
+[Actividad 04](#actividad-04) – State: definí claramente el patrón State, lo relacioné con el caso de las partículas y expliqué la función de los métodos onEnter y onExit. Aunque no se usan intensivamente en este caso, mostré cómo el patrón permite que los objetos cambien su comportamiento según su estado interno.
+
+[Actividad 05](#actividad-05) – Comet mia: implementé con éxito un nuevo tipo de partícula (Comet) sin alterar el patrón Observer, únicamente extendiendo la Factory y setup. Esto refuerza la correcta aplicación de los principios de diseño y demuestra que entendí cómo ampliar el proyecto sin romper la arquitectura.
+
+En conclusión, cumplí con todas las actividades solicitadas de forma completa, con explicaciones claras, código funcional y justificación de los patrones de diseño aplicados. Por eso considero que mi trabajo merece la nota máxima.
