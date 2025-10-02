@@ -356,4 +356,84 @@ Hay 3 tipos distintos, sin ver el código su mayor diferencia es el color y el t
 
 ### ¿Qué crees que está pasando “detrás de cámaras” cuando presionas las teclas? Formula una hipótesis inicial sobre cómo la aplicación cambia el comportamiento de las partículas.
 
+Creo que lo que pasa internamente es que cada partícula tiene un estado que define cómo se mueve. Cuando presiono una tecla, la aplicación envía un evento a todas las partículas (como una señal) y ellas cambian de estado según el evento recibido.
 
+- En el estado Normal se mueven aleatoriamente.
+- En Attract calculan una fuerza de atracción hacia el mouse.
+- En Repel hacen lo mismo pero en dirección contraria.
+- En Stop van frenando hasta quedar quietas.
+
+## Actividad 02
+
+1. Explica con tus propias palabras el propósito del patrón Observer. ¿Qué problema resuelve?
+
+El patrón Observer sirve para que un objeto pueda notificar automáticamente a varios otros cuando ocurre un evento o cambia su estado, sin necesidad de estar directamente acoplados entre sí.
+El problema que resuelve es la comunicación uno-a-muchos: en lugar de que un objeto tenga que conocer y actualizar manualmente a todos sus dependientes, simplemente envía una notificación general y cada observador decide cómo reaccionar.
+
+En este caso, ofApp no necesita preocuparse por cómo cambian las partículas, solo envía el evento; y cada Particle sabe qué hacer con él.
+
+2. Dibuja un diagrama que muestre la relación entre Subject, Observer, ofApp y Particle en el caso de estudio, indicando quién es el Sujeto y quiénes los Observadores.
+
+
+
+3. Construye un diagrama de secuencia que muestre cómo funciona el patrón Observer al presionar una tecla.
+
+
+
+4. ¿Qué ventajas crees que ofrece usar el patrón Observer en esta aplicación en comparación con, por ejemplo, que ofApp::update recorriera todas las partículas y les dijera directamente que cambien su comportamiento basado en una variable global? Piensa en términos de acoplamiento y extensibilidad.
+
+- Menor acoplamiento: ofApp no necesita recorrer las partículas una por una ni conocer sus detalles internos; solo envía un evento.
+- Extensibilidad: se pueden añadir fácilmente nuevos tipos de observadores (por ejemplo, un sistema de logging o un HUD que muestre estadísticas) sin modificar ofApp.
+- Reutilización y claridad: cada partícula maneja de forma independiente cómo cambia su comportamiento cuando recibe un evento.
+- Mantenimiento más sencillo: evita el uso de variables globales o condicionales dentro de ofApp::update, manteniendo el código modular y organizado.
+
+## Actividad 03:
+
+1. Explica con tus propias palabras el propósito del patrón Factory Method (o Simple Factory, en este caso). ¿Qué problema principal aborda en la creación de objetos?
+
+El Factory Method es un patrón de diseño creacional que abstrae el proceso de creación de objetos. En vez de que el código cliente tenga que decidir qué clase instanciar (new StarParticle(), new PlanetParticle()), delega esa decisión a una fábrica que sabe cómo construir el objeto adecuado.
+
+El problema que resuelve es el acoplamiento en la creación: evita que el código cliente (por ejemplo, ofApp) esté lleno de llamadas a constructores concretos, lo que complicaría la lectura, el mantenimiento y la extensión del sistema cuando se agreguen nuevos tipos.
+
+En este caso, se usa una versión simplificada del patrón, llamada Simple Factory (o Static Factory Method), porque el método de creación (createParticle) es estático.
+
+2. ¿Qué ventajas aporta el uso de ParticleFactory en ofApp::setup en comparación con instanciar y configurar las partículas directamente allí? Piensa en términos de organización del código (SRP - Single Responsibility Principle), legibilidad y facilidad para añadir nuevos tipos de partículas en el futuro.
+
+- Organización (SRP): ofApp se encarga solo de la lógica de la aplicación, y la fábrica de crear/configurar partículas. Así cada clase cumple una sola responsabilidad.
+- Legibilidad: el código en setup es mucho más limpio, solo muestra qué partículas se crean, no cómo se configuran internamente.
+- Extensibilidad: si se quiere añadir un nuevo tipo de partícula, no es necesario modificar setup, basta con ampliar la lógica de la fábrica.
+- Mantenimiento: la configuración está centralizada, no duplicada en diferentes partes del código.
+
+3. Imagina que quieres añadir un nuevo tipo de partícula llamada "black_hole" que tiene tamaño grande, color negro y velocidad muy lenta. Describe los pasos que necesitarías seguir para implementar esto utilizando la ParticleFactory existente. ¿Tendrías que modificar ofApp::setup? ¿Por qué sí o por qué no?
+
+Si quisiera añadir un nuevo tipo de partícula llamado "black_hole", los pasos serían muy simples. Primero iría a ParticleFactory::createParticle y le agregaría un caso nuevo donde configure esa partícula con tamaño grande, color negro y velocidad lenta. Después, en ofApp::setup, solo tendría que llamar a ParticleFactory::createParticle("black_hole") y ya funcionaría. No tendría que modificar nada más en setup, porque la lógica de cómo se configura la partícula está completamente aislada en la fábrica.
+
+~~~
+else if(type == "black_hole") {
+    Particle* p = new Particle();
+    p->setSize(20);              // grande
+    p->setColor(ofColor::black); // negro
+    p->setVelocity(ofVec2f(0.1, 0.1)); // muy lenta
+    return p;
+}
+~~~
+
+Y luego:
+
+~~~
+particles.push_back(ParticleFactory::createParticle("black_hole"));
+~~~
+
+4. El método createParticle en el ejemplo es estático. ¿Qué implicaciones (ventajas/desventajas) tiene esto comparado con tener una instancia de ParticleFactory y un método de instancia createParticle()?.
+
+Ventajas:
+
+- Simplicidad: no hay que crear un objeto ParticleFactory.
+- Acceso directo: ParticleFactory::createParticle("tipo").
+- Ideal si no necesita guardar estado ni configuraciones.
+
+Desventajas:
+
+- Menos flexible: no se puede cambiar el comportamiento de la fábrica en tiempo de ejecución.
+- Más difícil de testear/mokear en pruebas unitarias.
+- Si en el futuro se quiere tener una fábrica configurable (por ejemplo, con parámetros globales), habría que reestructurar el diseño para pasar de método estático a instancia.
