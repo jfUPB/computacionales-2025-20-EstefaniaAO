@@ -374,11 +374,13 @@ En este caso, ofApp no necesita preocuparse por cómo cambian las partículas, s
 
 2. Dibuja un diagrama que muestre la relación entre Subject, Observer, ofApp y Particle en el caso de estudio, indicando quién es el Sujeto y quiénes los Observadores.
 
+<img width="594" height="521" alt="image" src="https://github.com/user-attachments/assets/0c1c6a13-efac-45ff-b527-ab4a2f190198" />
 
+En el diagrama se muestra la implementación del patrón Observer en el caso de estudio. La clase ofApp hereda de Subject, por lo que actúa como el Sujeto, encargado de emitir eventos cuando se presionan teclas y de notificar a todos los observadores registrados. Por otro lado, la clase Particle implementa la interfaz Observer, de manera que cada partícula funciona como un Observador que reacciona a los eventos enviados por ofApp. Así, al presionar una tecla, el sujeto (ofApp) envía una notificación a todas las partículas, y cada observador (Particle) responde cambiando su estado interno según el evento recibido.
 
 3. Construye un diagrama de secuencia que muestre cómo funciona el patrón Observer al presionar una tecla.
 
-
+<img width="601" height="302" alt="secuencias drawio" src="https://github.com/user-attachments/assets/fb77ccb3-faee-49a9-9ebd-73908d713c90" />
 
 4. ¿Qué ventajas crees que ofrece usar el patrón Observer en esta aplicación en comparación con, por ejemplo, que ofApp::update recorriera todas las partículas y les dijera directamente que cambien su comportamiento basado en una variable global? Piensa en términos de acoplamiento y extensibilidad.
 
@@ -445,6 +447,9 @@ Desventajas:
 El patrón State sirve para que un objeto pueda cambiar su comportamiento dependiendo de su estado actual, como si se transformara en otra clase en tiempo de ejecución. Es útil cuando tengo varias situaciones (estados) que afectan cómo se comporta el objeto, y no quiero llenar mi código de if/else o switch. En vez de eso, cada estado se maneja como una clase aparte con su propio comportamiento.
 
 2. Dibuja un diagrama de estados simple para la clase Particle. Muestra los diferentes estados (Normal, Attract, Repel, Stop) como nodos y las transiciones entre ellos como flechas etiquetadas con el evento que las causa (p. ej., la tecla presionada: ‘n’, ‘a’, ‘r’, ‘s’).
+
+<img width="579" height="469" alt="dada drawio" src="https://github.com/user-attachments/assets/b3d3cdda-e5af-48ae-b7ac-1fd091fad26e" />
+
 
 La partícula puede estar en 4 estados:
 - NormalState: comportamiento por defecto.
@@ -811,6 +816,10 @@ void ofApp::keyPressed(int key) {
 }
 
 ~~~
+
+<img width="1912" height="938" alt="image" src="https://github.com/user-attachments/assets/e38efe90-7573-4ca9-9819-c88ea77bb86f" />
+
+Las particulas azules claras son las que puse yo y son muy rápidas.
 
 ### Explica cómo usaste el patrón Factory para esta nueva partícula.
 
