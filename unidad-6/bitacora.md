@@ -437,3 +437,37 @@ Desventajas:
 - Menos flexible: no se puede cambiar el comportamiento de la fábrica en tiempo de ejecución.
 - Más difícil de testear/mokear en pruebas unitarias.
 - Si en el futuro se quiere tener una fábrica configurable (por ejemplo, con parámetros globales), habría que reestructurar el diseño para pasar de método estático a instancia.
+
+## Actividad 04:
+
+1. Explica con tus propias palabras el propósito del patrón State. ¿Cuándo es útil aplicarlo?
+
+El patrón State sirve para que un objeto pueda cambiar su comportamiento dependiendo de su estado actual, como si se transformara en otra clase en tiempo de ejecución. Es útil cuando tengo varias situaciones (estados) que afectan cómo se comporta el objeto, y no quiero llenar mi código de if/else o switch. En vez de eso, cada estado se maneja como una clase aparte con su propio comportamiento.
+
+2. Dibuja un diagrama de estados simple para la clase Particle. Muestra los diferentes estados (Normal, Attract, Repel, Stop) como nodos y las transiciones entre ellos como flechas etiquetadas con el evento que las causa (p. ej., la tecla presionada: ‘n’, ‘a’, ‘r’, ‘s’).
+
+La partícula puede estar en 4 estados:
+- NormalState: comportamiento por defecto.
+- AttractState: se siente atraída hacia un punto.
+- RepelState: se aleja de un punto.
+- StopState: se detiene.
+
+Las transiciones se hacen con teclas:
+- n: Normal
+- a: Attract
+- r: Repel
+- s: Stop
+
+3. Describe las ventajas de usar el patrón State en Particle en lugar de tener un miembro std::string estadoActual y usar un gran if/else if/else o switch dentro de Particle::update() para cambiar el comportamiento. Piensa en cohesión, extensibilidad (añadir nuevos estados) y el Principio Abierto/Cerrado (Open/Closed Principle).
+
+Si usara algo como estadoActual = "normal" y un if/else gigante en update, el código de la clase Particle se volvería inmenso y difícil de mantener.
+Con State, cada comportamiento está en su propia clase (NormalState, AttractState, etc.), lo cual mejora la cohesión. Además, si en el futuro quiero agregar un nuevo estado (por ejemplo, "black_hole_state"), no tengo que modificar el update de Particle, solo creo una nueva clase de estado. Eso respeta el Principio Abierto/Cerrado: la clase está abierta a extensión, pero cerrada a modificación.
+
+4. ¿Qué responsabilidad tienen los métodos onEnter y onExit en el patrón State? Proporciona un ejemplo de por qué podrían ser útiles (incluso si no se usan mucho en todos los estados de este caso de estudio). Por ejemplo, ¿Qué podrías hacer en onEnter para AttractState o en onExit para StopState?
+
+Los métodos onEnter y onExit sirven para manejar lo que pasa cuando una partícula entra o sale de un estado.
+
+- Por ejemplo, en AttractState::onEnter podría inicializar una fuerza inicial de atracción o un color especial para marcar que entró en ese estado.
+- En StopState::onExit podría resetear la velocidad de la partícula para que no quede congelada cuando vuelva a otro estado.
+
+Aunque en este caso de estudio no se usan mucho, estos métodos son clave para tener control de transiciones y no solo del comportamiento dentro de update.
