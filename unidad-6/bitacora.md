@@ -7,6 +7,7 @@
 - [Actividad 03](#actividad-03)
 - [Actividad 04](#actividad-04)
 - [Actividad 05](#actividad-05)
+- [Autoevaluación](#autoevaluación)
 
 ## Actividad 01:
 
