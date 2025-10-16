@@ -265,6 +265,8 @@ UsarA=D para apuntar a la dirección BASE + j.
 
 #### FINAL:
 
+
+
   ``` asm
 @1
 D=A
@@ -361,5 +363,101 @@ M=D
 - Tuve más en cuenta que A guarda direcciones y D guarda valores, y eso es clave para moverse con punteros.
 - Ver cómo se construye todo paso a paso me ayudó a entender mucho mejor cómo funciona el acceso a memoria en bajo nivel.
 
+<img width="1248" height="875" alt="image" src="https://github.com/user-attachments/assets/cec3c1cd-5cec-4c02-a5f0-55ebca9a2f67" />
 
+Eliminé las variables simbólicas (sum, j, BASE, addr) y usé direcciones numéricas.
+Aseguré que sum y j se inicialicen con direcciones válidas.
+Dejé solo las etiquetas válidas de control de flujo.
+Ahora si funciona bien, antes como que no reconocia bien las direcciones en la RAM.
+
+Corrección:
+  ```
+@1
+D=A
+@16
+M=D
+
+@2
+D=A
+@17
+M=D
+
+@3
+D=A
+@18
+M=D
+
+@4
+D=A
+@19
+M=D
+
+@5
+D=A
+@20
+M=D
+
+@6
+D=A
+@21
+M=D
+
+@7
+D=A
+@22
+M=D
+
+@8
+D=A
+@23
+M=D
+
+@9
+D=A
+@24
+M=D
+
+@10
+D=A
+@25
+M=D
+
+@0
+M=0
+
+@1
+M=0
+
+(LOOP)
+@1
+D=M
+@10
+D=D-A
+@END
+D;JGE
+
+@16
+D=A
+@1
+A=M
+D=D+A
+A=D
+D=M
+
+@0
+D=D+M
+@0
+M=D
+
+@1
+M=M+1
+
+@LOOP
+0;JMP
+
+(END)
+@END
+0;JMP
+
+  ```
 
