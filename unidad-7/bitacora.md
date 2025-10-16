@@ -1,5 +1,15 @@
 # Bitácora de aprendizaje de la unidad 7
 
+## **Índice**
+
+- [Actividad 01](#actividad-01)
+- [Actividad 02](#actividad-02)
+- [Actividad 03](#actividad-03)
+- [Actividad 04](#actividad-04)
+- [Actividad 05](#actividad-05)
+- [Actividad 06](#actividad-06)
+- [Autoevaluación](#autoevaluación)
+
 ## Actividad 01:
 
 ### Incluye una captura de pantalla del ejemplo funcionando en tu máquina.
@@ -342,3 +352,399 @@ Primero se escriben los códigos fuente de los shaders: al menos un vertex shade
 Después, se crean objetos de shader con OpenGL, se les asigna su código fuente y se compilan. Si no hay errores, se linkean ambos dentro de un shader program, que es el objeto final que contiene el pipeline programable.
 
 Una vez el programa está listo, se activa con glUseProgram(shaderProg). A partir de ahí, todos los dibujos que hagamos usarán esos shaders hasta que se desactive o se cambie el programa.
+
+### 🧪
+
+#### Predicción antes de ejecutar
+
+Por lo que entiendo, en este nuevo código el **VBO** tiene varios atributos en una misma estructura: la posición, el color y el offset. Entonces cada vértice tiene 8 valores: 3 para la posición (x, y, z), 3 para el color (r, g, b) y 2 para el offset (u, v).
+
+Cuando se hace `glVertexAttribPointer`, lo que realmente se está diciendo es “de aquí a aquí están los datos de este atributo”, usando ese desplazamiento con `(void*)(3 * sizeof(float))`, `(6 * sizeof(float))`, etc.
+
+Cada shader usa solo un atributo distinto:
+- El **shader A** usa la posición real del vértice.  
+- El **shader B** usa el color, pero como si fuera la posición.  
+- El **shader C** usa el offset como posición.  
+
+Entonces mi predicción es que cuando se ejecute:
+1. Con el **shader A**, debería verse un triángulo “normal” formado con los valores de posición del arreglo.  
+2. Con el **shader B**, el triángulo va a cambiar completamente de lugar o forma, porque ahora las coordenadas de los colores se están usando como si fueran coordenadas espaciales. Así que es probable que se vea en otro lado o más aplastado.  
+3. Con el **shader C**, como el offset solo tiene dos valores (x y y), el triángulo también se va a mover o reubicar en otra zona, y quizá se vea más chico o desplazado.  
+
+
+<img width="371" height="429" alt="image" src="https://github.com/user-attachments/assets/1c6100d9-09da-49f2-86a0-09850b425972" />
+
+
+## Actividad 05:
+
+
+https://github.com/user-attachments/assets/74f8cd11-8eca-430f-93a9-f0235a8fd899
+
+~~~
+#include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+
+// Callback: ajusta el viewport cuando cambie el tamano de la ventana
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
+// Procesa entrada simple: cierra con ESC
+void processInput(GLFWwindow* window) {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+// Tamano de las ventanas
+const unsigned int SCR_WIDTH = 400;
+const unsigned int SCR_HEIGHT = 400;
+
+// Fuentes de los shaders
+const char* vertexShaderSrc = R"glsl(
+    #version 460 core
+
+	layout(location = 0) in vec3 aPos;
+	uniform vec2 offset;
+
+	void main() {
+		vec3 newPos = aPos;
+		newPos.x += offset.x;
+		newPos.y += offset.y;
+		gl_Position = vec4(newPos, 1.0);
+}
+)glsl";
+
+const char* fragmentShaderSrc = R"glsl(
+    #version 460 core
+
+	out vec4 FragColor;
+	uniform vec4 ourColor;
+
+	void main() {
+		FragColor = ourColor;
+}
+)glsl";
+
+// IDs globales
+unsigned int VAO, VBO;
+unsigned int shaderProg;
+
+// Compila y linkea un programa de shaders, retorna su ID
+unsigned int buildShaderProgram() {
+	int success;
+	char log[512];
+
+	unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &vertexShaderSrc, nullptr);
+	glCompileShader(vs);
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(vs, 512, nullptr, log);
+		std::cerr << "ERROR VERTEX SHADER:\n" << log << "\n";
+	}
+
+	unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &fragmentShaderSrc, nullptr);
+	glCompileShader(fs);
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(fs, 512, nullptr, log);
+		std::cerr << "ERROR FRAGMENT SHADER:\n" << log << "\n";
+	}
+
+	unsigned int prog = glCreateProgram();
+	glAttachShader(prog, vs);
+	glAttachShader(prog, fs);
+	glLinkProgram(prog);
+	glGetProgramiv(prog, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(prog, 512, nullptr, log);
+		std::cerr << "ERROR LINKING PROGRAM:\n" << log << "\n";
+	}
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+	return prog;
+}
+
+// Crea un VAO/VBO con los datos de un triangulo
+void setupTriangle() {
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f
+	};
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+}
+
+
+int main()
+{
+	// 1) Inicializar GLFW
+	if (!glfwInit()) {
+		std::cerr << "Fallo al inicializar GLFW\n";
+		return -1;
+	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	// 2) Crear ventana
+	GLFWwindow* mainWindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Ventana", nullptr, nullptr);
+	if (!mainWindow) {
+		std::cerr << "Error creando ventana1\n";
+		glfwTerminate();
+		return -1;
+	}
+
+	// 3) Lee el tamano del framebuffer
+	int bufferWidth, bufferHeight;
+	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
+
+	// 4) Callbacks 
+	glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
+
+
+	// 5) Cargar GLAD y recursos en contexto de window1
+	glfwMakeContextCurrent(mainWindow);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cerr << "Fallo al cargar GLAD (contexto1)\n";
+		return -1;
+	}
+
+	// 6) Habilita el V-Sync
+	glfwSwapInterval(1);
+
+	// 7) Compila y linkea shaders
+	shaderProg = buildShaderProgram();
+
+	// 8) Genera el contenido a mostrar
+	setupTriangle();
+
+	// 9) Configura el viewport
+	glViewport(0, 0, bufferWidth, bufferHeight);
+
+	glUseProgram(shaderProg);
+	int offsetLocation = glGetUniformLocation(shaderProg, "offset");
+	int colorLocation = glGetUniformLocation(shaderProg, "ourColor");
+
+
+	// 10) Loop principal
+	while (!glfwWindowShouldClose(mainWindow))
+	{
+		// 11) Manejo de eventos
+		glfwPollEvents();
+
+
+		// 12) Procesa la entrada
+		processInput(mainWindow);
+
+		// 13) Configura el color de fondo y limpia el framebuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// 14) Indica a OpenGL que use el shader program
+		glUseProgram(shaderProg);
+
+
+		double xpos, ypos;
+		glfwGetCursorPos(mainWindow, &xpos, &ypos);
+
+
+		float x = (float)xpos / (float)SCR_WIDTH;
+		if (x < 0) x = 0;
+		if (x > 1) x = 1;
+
+		float y = (float)ypos / (float)SCR_HEIGHT;
+		if (y < 0) y = 0;
+		if (y > 1) y = 1;
+
+
+		glUniform4f(colorLocation, x, y, 0.0f, 1.0f);
+
+
+		glUniform2f(offsetLocation, x * 2 - 1, 1 - y * 2);
+
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+
+		// 16) Intercambia buffers y muestra el contenido
+		glfwSwapBuffers(mainWindow);
+	}
+
+	// 17) Limpieza
+	glfwMakeContextCurrent(mainWindow);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderProg);
+
+	glfwDestroyWindow(mainWindow);
+	glfwTerminate();
+	return 0;
+}
+~~~
+
+## Explica el proceso de normalización de las coordenadas del mouse y cómo se relaciona con el sistema de coordenadas de OpenGL.
+
+Cuando se utiliza la función glfwGetCursorPos(window, &xpos, &ypos); GLFW se encarga de devolver la posición del cursor en pixeles bajo las siguientes condiciones:
+
+- El origen (0,0) está ubicado en la esquina superior izquierda de la ventana
+- xpos aumenta a la derecha y ypos aumenta hacia abajo
+
+por ejemplo, cuando se crea una ventana de 400x400 pixeles, suponiendo que el cursor está en el centro entonces xpos = 200 y ypos = 200.
+
+El problema viene cuando se entiende de que OpenGl no trabaja con pixeles si no que en lugar de eso trabaja con un sistema normalizado y centrado llamado NDC entonces es por esto que surge el proceso de normalización
+
+El proceso que se realiza es el siguiente:
+
+Inicialmente se convierten los pixeles a valores entre 0 y 1 dividiendo entre el tamaño de la ventaja. Pongamos de ejemplo:
+
+cpp
+float x = (float)xpos / (float)SCR_WIDTH;
+float y = (float)ypos / (float)SCR_HEIGHT;
+
+
+Esto se encarga de transformar:
+
+- x = 0 cuando el mouse está a la izquierda,
+- x = 1 cuando está a la derecha,
+- y = 0 en la parte superior,
+- y = 1 en la parte inferior.
+
+Haciendo normalización de coordenadas al rango [0,1]
+
+
+## Explica el proceso de normalización a coordenadas de dispositivo (NDC) y cómo se relaciona con el sistema de coordenadas de OpenGL.
+
+
+El sistema de coordenadas de OpenGL no utiliza [0,1] si no que en su lugar usa un sistema centrado en el origen (0,0) y con un rango de [-1,1] en cada uno de los ejes. 
+
+Básicamente
+
+| Eje | Valor mínimo | Valor máximo | Descripción                  |
+| --- | ------------ | ------------ | ---------------------------- |
+| X   | -1           | 1            | Izquierda → Derecha          |
+| Y   | -1           | 1            | Abajo → Arriba               |
+| Z   | -1           | 1            | Plano cercano → Plano lejano |
+
+
+Para realizar la conversión se hace una transformación lineal en la siguiente linea
+cpp
+glUniform2f(offsetLocation, x * 2 - 1, 1 - y * 2);
+
+Acá podemos ver qu ocurre:
+
+| Operación   | Qué hace                                                   | Resultado                    |
+| ----------- | ---------------------------------------------------------- | ---------------------------- |
+| x * 2 - 1 | Escala el rango [0,1] a [-1,1]                             | Izquierda (-1) → Derecha (1) |
+| 1 - y * 2 | También pasa de [0,1] a [-1,1], pero *invierte el eje Y* | Abajo (-1) → Arriba (1)      |
+
+Es importante entender que la inversión en 1 - y * 2 se debe de hacer puesto que en GLFW, la Y crece hacia abajo y en OpenGL, la Y crece hacia arriba.
+
+Este se relaciona con OpenGl puesto que el sistema de coordenadas en OpenGL pasa por varias etapas antes de que algo se dibuje en la pantalla, en el programa que estamos usando se están moviendo los vértices en el espacio NDC usando uniform(offset)
+
+## Actividad 06:
+
+<img width="396" height="386" alt="image" src="https://github.com/user-attachments/assets/72aa5256-8413-46ba-8727-a75f4286896b" />
+<img width="385" height="383" alt="image" src="https://github.com/user-attachments/assets/91bad487-7ce7-46c5-adff-a7b5b7b2f112" />
+<img width="393" height="389" alt="image" src="https://github.com/user-attachments/assets/9ae77c84-09b4-465f-a3a2-54c95987e0d1" />
+<img width="384" height="380" alt="image" src="https://github.com/user-attachments/assets/d620499a-0523-4137-bdb1-3254afc53cdb" />
+
+### Cambios en el código C++
+En el código principal agregué la obtención del tiempo y el envío de ese valor como uniform al shader en cada frame.  
+Primero declaré el **uniform** en el shader (`uniform float time;`) y luego, en el bucle principal del programa, obtuve el tiempo actual con `glfwGetTime()` y lo pasé al shader con `glUniform1f`.
+
+```cpp
+// Dentro del loop principal
+while (!glfwWindowShouldClose(mainWindow.getWindow())) {
+    // Obtener el tiempo actual en segundos
+    double timeValue = glfwGetTime();
+
+    // Activar el shader
+    shaderList[0].UseShader();
+
+    // Obtener la ubicación del uniform 'time' en el shader
+    GLuint timeLoc = glGetUniformLocation(shaderList[0].GetShaderID(), "time");
+
+    // Pasar el tiempo al shader
+    glUniform1f(timeLoc, (float)timeValue);
+
+    // Renderizar el triángulo
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    shaderList[0].UseShader();
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+
+    glfwSwapBuffers(mainWindow.getWindow());
+    glfwPollEvents();
+}
+```
+
+Con eso, el valor de glfwGetTime() se actualiza constantemente y se pasa al shader en cada iteración del render.
+
+
+### Código del Fragment Shader
+```
+#version 330 core
+
+out vec4 color;
+uniform float time;
+
+void main()
+{
+    float r = (sin(time) + 1.0) / 2.0;  // Oscila entre 0 y 1
+    float g = (sin(time * 0.7) + 1.0) / 2.0;  // Otro ritmo de oscilación
+    float b = (cos(time * 1.3) + 1.0) / 2.0;  // Con cos() cambia de fase
+
+    color = vec4(r, g, b, 1.0);
+}
+```
+
+### Explicación de efecto:
+
+Usé las funciones sin() y cos() aplicadas al tiempo para generar variaciones suaves y cíclicas en los tres componentes del color (rojo, verde y azul).
+Cada función produce valores que oscilan entre -1.0 y 1.0, pero al aplicar (x + 1.0) / 2.0 los normalizo para que vayan de 0.0 a 1.0, lo que se traduce en cambios suaves de color visibles en pantalla.
+
+El resultado es un triángulo que cambia de color continuamente, pasando por distintas combinaciones de tonos, de forma fluida y sin saltos.
+
+### Evidencia:
+
+![Grabación 2025-10-16 024244](https://github.com/user-attachments/assets/80b35e3b-6033-44de-8835-d3a4f052fde3)
+
+### Reflexión
+
+Usar el tiempo como uniform abre muchas posibilidades creativas.
+Por ejemplo:
+
+- Podría usar sin(time) para mover la posición de un vértice, haciendo que el triángulo como que“respire”.
+- Podría variar el tamaño multiplicando las coordenadas por una función del tiempo.
+- También podría animar una rotación sencilla con una matriz de rotación que dependa de time para hacerlo más llamtivo.
+
+El tiempo se convierte básicamente en un controlador que permite animar cualquier parámetro de la escena sin tener que escribir lógica compleja.
+
+
+## Autoevaluación:
+
+| **Actividad** | **Cumplimiento** | **Descripción** |
+|----------------|------------------|-----------------|
+| **Actividad 1:** |  Completa | En esta parte fue como entender el código base y mirar qué hacía cada cosa, como que se inicializa GLFW, se crean los buffers y se dibuja el triángulo. Al principio no entendía bien lo de los buffers pero lo escribí igual con mis dudas porque así después pude ir entendiendo mejor, por eso siento que igual está completa porque me enfoqué en observar y anotar lo que iba entendiendo. |
+| **Actividad 2:** |  Completa | Aquí fue más como entender cómo se conectan todas las librerías, entonces puse cómo cada una hace una parte distinta, por ejemplo GLFW la ventana, GLAD las funciones y así, y lo expliqué como si se lo contara a alguien para entenderlo más fácil. Por eso creo que está completa porque lo hice con mis palabras y no fue copiar definiciones. |
+| **Actividad 3:** |  Completa | En esta parte probé varios valores en el viewport, como dividir y multiplicar el ancho y el alto, y fui mirando cómo se movía o cambiaba el triángulo. También escribí lo que entendí de los buffers, el contexto y los shaders, y fue como conectar lo visual con lo técnico, por eso me pareció muy buena práctica y la dejé con mis observaciones. |
+| **Actividad 4:** |  Completa | Esta fue más teórica, pero igual la escribí con mis ejemplos para entender cómo la GPU va procesando todo, como los vértices, los fragmentos y el pipeline. Fue como unir lo de las otras actividades con esta parte más explicada y por eso siento que me quedó bien completa. |
+| **Actividad 5:** |  Completa | En esta parte ya hice los cambios en el código, agregando el tiempo con glfwGetTime() y pasándolo al shader para que el color cambiara con sin() y se viera el efecto de movimiento. Lo probé, funcionó y escribí cómo se actualizaba el color, por eso pienso que está muy completa porque integré todo lo anterior y entendí cómo comunicar datos entre CPU y GPU. |
