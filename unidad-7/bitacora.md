@@ -161,3 +161,102 @@ OpenGL es solo una especificación, por lo que depende del fabricante de la tarj
 
 —
 > En los includes hay que añadir GLAD antes que GLFW. El archivo include para GLAD incluye los headers de OpenGL necesarios detrás de escenas.
+
+### 🧪: Cambiar `GL_TRIANGLES`
+
+<img width="750" height="458" alt="image" src="https://github.com/user-attachments/assets/f5de7699-f463-41f8-9b78-f1970fa0fbe7" />
+Normal.
+
+Con `GL_LINES`
+<img width="843" height="445" alt="image" src="https://github.com/user-attachments/assets/4a0092e6-04a9-4836-a515-f00b444abcd5" />
+
+Con `GL_POINTS`
+<img width="721" height="467" alt="image" src="https://github.com/user-attachments/assets/ec547c5b-4aaf-43f2-b52b-9637251f24aa" />
+
+Con `GL_TRIANGLES` pero cambiando el tercer parámetro a 
+- 2:
+<img width="922" height="444" alt="image" src="https://github.com/user-attachments/assets/aa395bd9-b41a-4af2-aeb7-ff63b98d5f5b" />
+
+- 5:
+<img width="786" height="442" alt="image" src="https://github.com/user-attachments/assets/17caeb41-bd13-4a22-b155-055ac09dc221" />
+
+
+> Vamos a terminar esta actividad con un nuevo momento de consolidación parcial. Hay algunos conceptos relacionados con los shaders y el pipeline de OpenGL que no hemos visto en detalle, pero no te preocupes, los vamos a trabajar en la siguiente actividad. Por ahora, quiero que te concentres en lo que has aprendido hasta aquí. Explica con tus propias palabras los siguientes conceptos. Puedes usar ejemplos, analogías o diagramas para ilustrar tus respuestas. Es importante que intentes responder estos conceptos sin ver inicialmente tus notas. Trata de ejercitar tu memoria y tu comprensión. Luego, puedes revisar tus notas para completar o corregir lo que hayas escrito.
+
+- ¿Qué es el contexto OpenGL?
+
+El contexto OpenGL es como el “taller” donde OpenGL trabaja. Es un espacio que guarda todo el estado actual del sistema gráfico: qué color se usa, qué objetos están cargados, qué shaders están activos, etc.
+Sin este contexto, OpenGL no tendría dónde guardar o aplicar los cambios. Cada vez que usamos funciones de OpenGL, en realidad estamos modificando este “taller”, diciéndole cómo dibujar.
+Por eso se dice que OpenGL es una máquina de estados, porque todo lo que hace depende del estado actual del contexto.
+
+- ¿Cuál es el rol de la biblioteca GLFW y qué ventaja tiene usarla?
+
+GLFW es una librería que nos ayuda a crear ese “taller” (el contexto OpenGL), además de manejar cosas como la ventana, el teclado, el mouse y el tiempo del juego.
+Sin GLFW, crear un contexto gráfico dependería del sistema operativo (Windows, Linux, macOS) y sería mucho más complicado.
+La ventaja de usarla es que nos abstrae de los detalles del sistema operativo, permitiendo que nuestro código sea más limpio, portable y enfocado en OpenGL.
+
+- ¿Por qué crees que OpenGL necesita un contexto (recuerda la analogía del taller de arte)?
+
+Imagina que OpenGL es un artista. Para pintar necesita un taller con sus herramientas, colores, y lienzos.
+Ese taller es el contexto OpenGL.
+Si no existiera, el artista no sabría qué pinceles usar, dónde pintar ni qué cuadro está trabajando.
+El contexto le da orden a todo lo que hace: es donde se guarda el estado de sus materiales, sus instrucciones y sus resultados.
+
+- ¿En últimas qué será el framebuffer y a qué te recuerda de las dos primeras unidades del curso?
+
+El framebuffer es el “lienzo” donde OpenGL pinta la imagen antes de mostrarla en pantalla.
+Cuando termina de dibujar, esa imagen se envía a la pantalla.
+Me recuerda a las primeras unidades del curso, donde hablábamos de cómo los pixeles se almacenan en memoria para formar una imagen.
+El framebuffer es justamente esa memoria intermedia donde se guarda el resultado final del dibujo.
+
+- ¿Qué relación entre en el viewport y el framebuffer?
+
+El framebuffer es toda la superficie donde se dibuja, pero el viewport define qué parte de esa superficie se usa para mostrar la imagen.
+Por ejemplo, si el framebuffer es una hoja de papel completa, el viewport sería un recuadro dentro de ella donde decides dibujar.
+En código, lo configuramos con glViewport() para ajustar el área visible.
+
+- ¿En todo la analizado hasta ahora qué rol juega los drivers de la GPU y la GPU misma?
+
+Los drivers de la GPU son los que traducen las instrucciones de OpenGL a algo que la GPU realmente pueda entender y ejecutar.
+La GPU (tarjeta gráfica) es quien hace los cálculos pesados: renderiza triángulos, aplica texturas, luces, etc.
+OpenGL solo define el “lenguaje” y las reglas, pero cada fabricante implementa esas funciones a su manera por medio de los drivers.
+
+- ¿Por qué crees que sea necesario activar el VSync? ¿Si no lo activas y la imagen es estática qué crees que pase, y si es dinámica?
+
+El VSync (Vertical Synchronization) sincroniza la velocidad de dibujo de los frames con la frecuencia del monitor (por ejemplo, 60 Hz).
+Si no se activa y la imagen es estática, puede que no notes diferencia, pero si es dinámica, puede aparecer el efecto tearing (la imagen se corta o desincroniza al moverse).
+Activar el VSync evita eso, aunque a veces puede reducir ligeramente la velocidad de respuesta si el rendimiento es muy alto.
+
+- En esta unidad estamos usando OpenGL moderno, pero ¿Qué es OpenGL Legacy? ¿Qué diferencias hay entre ambos?
+
+OpenGL Legacy es la versión antigua (hasta la 2.0 aprox.) que usaba funciones fijas como glBegin() o glVertex3f() para dibujar.
+El programador no tenía tanto control: la “tubería de renderizado” era fija y hacía todo automáticamente.
+El OpenGL moderno (3.0 en adelante) elimina esa forma y nos obliga a crear nuestros propios shaders y manejar los datos con VBO y VAO, dándonos mucho más control y eficiencia.
+
+- ¿Qué es el shader program? ¿Por qué es importante en OpenGL moderno?
+
+El shader program es un pequeño programa que corre en la GPU. Está compuesto por dos partes principales:
+
+-- Vertex Shader: se encarga de procesar la posición de los vértices.
+
+-- Fragment Shader: se encarga del color de cada píxel.
+Es esencial porque en OpenGL moderno ya no hay una pipeline fija, así que todo lo visual pasa por estos shaders.
+Nos permiten definir exactamente cómo se verá cada punto, textura o luz.
+
+- Trata de revisar el código setupTriangle(), intuitivamente ¿Qué crees que hace? ¿Qué crees que es el VAO y el VBO?
+
+setupTriangle() probablemente crea los datos para un triángulo y los envía a la GPU.
+
+-- El VBO (Vertex Buffer Object) guarda los vértices (posiciones, colores, coordenadas, etc.).
+
+-- El VAO (Vertex Array Object) guarda las referencias de cómo usar esos datos: cuál buffer, qué atributos, y cómo leerlos.
+
+  el VBO tiene los datos, y el VAO sabe cómo interpretarlos para dibujar.
+
+- En el ciclo principal (game loop) de OpenGL, notaste que en cada frame (cuadro) le decimos a openGL que use el shader program y el VAO. Si le indicas esto antes del game loop ¿Será necesario seguirlo haciendo en cada loop? Si no es necesario ¿En qué casos crees que esto puede ser útil?
+
+
+
+- Finalmente, recuerda lo que hace glfwSwapBuffers(mainWindow); ¿Por qué crees que es importante? ¿Qué pasaría si no lo llamas? ¿Cómo explicas lo que pasa si no lo llamas? (experimenta)
+
+
