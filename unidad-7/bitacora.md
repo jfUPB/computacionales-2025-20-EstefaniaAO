@@ -741,10 +741,13 @@ El tiempo se convierte básicamente en un controlador que permite animar cualqui
 
 ## Autoevaluación:
 
+5
+
 | **Actividad** | **Cumplimiento** | **Descripción** |
-|----------------|------------------|-----------------|
-| **Actividad 1:** |  Completa | En esta parte fue como entender el código base y mirar qué hacía cada cosa, como que se inicializa GLFW, se crean los buffers y se dibuja el triángulo. Al principio no entendía bien lo de los buffers pero lo escribí igual con mis dudas porque así después pude ir entendiendo mejor, por eso siento que igual está completa porque me enfoqué en observar y anotar lo que iba entendiendo. |
-| **Actividad 2:** |  Completa | Aquí fue más como entender cómo se conectan todas las librerías, entonces puse cómo cada una hace una parte distinta, por ejemplo GLFW la ventana, GLAD las funciones y así, y lo expliqué como si se lo contara a alguien para entenderlo más fácil. Por eso creo que está completa porque lo hice con mis palabras y no fue copiar definiciones. |
-| **Actividad 3:** |  Completa | En esta parte probé varios valores en el viewport, como dividir y multiplicar el ancho y el alto, y fui mirando cómo se movía o cambiaba el triángulo. También escribí lo que entendí de los buffers, el contexto y los shaders, y fue como conectar lo visual con lo técnico, por eso me pareció muy buena práctica y la dejé con mis observaciones. |
-| **Actividad 4:** |  Completa | Esta fue más teórica, pero igual la escribí con mis ejemplos para entender cómo la GPU va procesando todo, como los vértices, los fragmentos y el pipeline. Fue como unir lo de las otras actividades con esta parte más explicada y por eso siento que me quedó bien completa. |
-| **Actividad 5:** |  Completa | En esta parte ya hice los cambios en el código, agregando el tiempo con glfwGetTime() y pasándolo al shader para que el color cambiara con sin() y se viera el efecto de movimiento. Lo probé, funcionó y escribí cómo se actualizaba el color, por eso pienso que está muy completa porque integré todo lo anterior y entendí cómo comunicar datos entre CPU y GPU. |
+|---------------|------------------|-----------------|
+| **Actividad 1:** | Completa | En esta parte fue como entender el código base y mirar qué hacía cada cosa, como que se inicializa GLFW, se crean los buffers y se dibuja el triángulo; al principio no entendía bien lo de los buffers pero lo escribí igual con mis dudas y lo anoté porque luego pude resolverlo, por eso la dejo completada. |
+| **Actividad 2:** | Completa | Aquí expliqué con mis palabras cómo se conectan GLFW, GLAD, GLM, opengl32.lib y los drivers de la GPU, diciendo qué hace cada uno, como si se lo contara a alguien; lo hice de memoria y luego lo revisé, por eso digo que está completa. |
+| **Actividad 3:** | Completa | Probé distintos valores en `glViewport()` (dividir, multiplicar, mover), tomé capturas y describí lo que pasaba, además amplié con teoría sobre framebuffer, contexto y estados de OpenGL; fue práctico y teórico a la vez, por eso lo marco como completo. |
+| **Actividad 4:** | Completa | Respondí las preguntas sobre CPU vs GPU, el pipeline (vértices, rasterización, fragmentos), shader program y rasterización, usando ejemplos y analogías para entenderlo mejor; conecté la teoría con el código, por eso está completa. |
+| **Actividad 5:** | Completa | Expliqué todo lo de la normalización con las coordenadas del mouse. Implementé el shader que usa `glfwGetTime()` y un `uniform`, mostré cómo paso el tiempo desde C++ al fragment shader y expliqué el rango de valores y el efecto visual; lo probé y documenté, por eso lo marco como completo. |
+| **Actividad 6:** | Completa | Añadí la explicación y las capturas sobre la animación con tiempo, y puse el código y el fragment shader usados; describí  cómo eso afecta offset y color, por eso está completada. |
