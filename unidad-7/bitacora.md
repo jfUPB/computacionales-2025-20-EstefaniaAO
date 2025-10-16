@@ -255,8 +255,90 @@ setupTriangle() probablemente crea los datos para un triángulo y los envía a l
 
 - En el ciclo principal (game loop) de OpenGL, notaste que en cada frame (cuadro) le decimos a openGL que use el shader program y el VAO. Si le indicas esto antes del game loop ¿Será necesario seguirlo haciendo en cada loop? Si no es necesario ¿En qué casos crees que esto puede ser útil?
 
-
+Técnicamente, si no cambias de objeto ni de shader, no sería necesario volver a decirlo cada frame.
+Pero hacerlo garantiza que el estado sea consistente: si en algún momento cambias de VAO o shader, luego puedes volver a este sin problemas.
+También es útil si en el futuro dibujas más de un objeto o escena con distintos shaders.
 
 - Finalmente, recuerda lo que hace glfwSwapBuffers(mainWindow); ¿Por qué crees que es importante? ¿Qué pasaría si no lo llamas? ¿Cómo explicas lo que pasa si no lo llamas? (experimenta)
 
+glfwSwapBuffers() intercambia el framebuffer que OpenGL acaba de dibujar con el que se está mostrando en pantalla.
+Esto se llama doble buffering: mientras uno se muestra, el otro se prepara.
+Si no llamas a esta función, la ventana nunca actualizará la imagen, así que parecerá congelada.
 
+## Actividad 04
+
+### ¿Cuál es la diferencia entre una CPU y una GPU?
+
+La CPU es el procesador principal del computador, el que se encarga de ejecutar la mayoría de las instrucciones y coordinar todos los procesos. Está hecha para manejar muchas tareas diferentes, pero una a la vez o en pocos núcleos.
+
+La GPU, en cambio, está diseñada para procesar muchos datos al mismo tiempo, especialmente los relacionados con gráficos e imágenes. Tiene muchos núcleos más pequeños y simples que trabajan en paralelo para realizar operaciones repetitivas muy rápido.
+
+- ¿Cuáles son los tres pasos claves del pipeline de OpenGL? Explica en tus propias palabras cuál es el objetivo de cada paso.
+
+Los tres pasos principales del pipeline de OpenGL son:
+
+1. Procesamiento de vértices: aquí se toman los vértices de los objetos (sus coordenadas, colores, texturas, etc.) y se transforman para ubicarlos correctamente en la escena.
+
+2. Rasterización: convierte esos vértices (que forman triángulos u otras figuras) en fragmentos, que son como los datos de cada posible píxel en pantalla.
+
+3. Procesamiento de fragmentos: en este paso se calcula el color final de cada fragmento, aplicando texturas, luces y efectos antes de que se conviertan en píxeles visibles.
+
+- La gran novedad que introduce OpenGL moderno es el pipeline programable. ¿Qué significa esto? ¿Qué diferencia hay entre el pipeline fijo y el programable? ¿Qué ventajas le ves a esto? y si el pipeline es programable, ¿Qué tengo que programar?
+
+En las versiones antiguas (OpenGL Legacy) el pipeline era fijo, lo que significa que las etapas funcionaban de una sola forma establecida por OpenGL. El programador no podía cambiar cómo se procesaban los vértices o los colores.
+
+El pipeline programable permite escribir pequeños programas llamados shaders, que controlan directamente cómo se procesan los vértices (con el vertex shader) y cómo se calculan los colores y luces (con el fragment shader).
+
+Si el pipeline es programable, lo que se programa son precisamente esos shaders que reemplazan las funciones fijas que antes hacía OpenGL automáticamente.
+
+- Si fueras a describir el proceso de rasterización ¿Qué dirías?
+
+La rasterización es el proceso donde OpenGL toma las formas geométricas (como triángulos) y las convierte en fragmentos que corresponden a posiciones específicas en la pantalla.
+Es básicamente el paso que traduce la geometría del mundo 3D a una imagen 2D formada por pequeños puntos (fragmentos) que luego se colorean.
+
+- ¿Qué son los fragmentos? ¿Es lo mismo un fragmento que un pixel? ¿Por qué?
+
+Un fragmento no es exactamente un píxel, aunque están muy relacionados.
+El fragmento es la información que podría llegar a ser un píxel en la pantalla, pero todavía no lo es.
+Cada fragmento contiene datos como su color, profundidad, coordenadas y otras propiedades. Solo después de pasar ciertas pruebas e convierte en un píxel visible.
+
+- Explica qué problema resuelve el Z-buffer y ¿Qué es el depth test?
+
+El Z-buffer guarda la información de profundidad de cada fragmento, es decir, qué tan cerca o lejos está respecto a la cámara.
+El depth test usa esa información para decidir qué fragmentos se deben ver y cuáles deben quedar ocultos detrás de otros objetos.
+
+- ¿Por qué se presenta el problema de la aliasing? ¿Qué es el anti-aliasing?
+
+El aliasing aparece cuando las líneas o bordes diagonales se ven con dientes o escalonadas porque la resolución de la pantalla es limitada.
+El anti-aliasing es una técnica para suavizar esos bordes, mezclando los colores de los píxeles cercanos para dar una apariencia más suave y continua.
+
+- ¿Qué relación hay entre la iluminación y el fragment shader? Siempre es necesario tener en cuenta la iluminación en un fragment shader? o puedo hacer un fragment shader sin iluminación? Explica que implicaciones tiene esto.
+
+La iluminación se calcula normalmente dentro del fragment shader, porque ahí se determina el color final de cada punto en pantalla y cómo le afectan las luces.
+No siempre es obligatorio incluir iluminación: se puede hacer un fragment shader sin ella, por ejemplo, si solo quieres mostrar colores planos o efectos estilizados.
+Pero si la ignoras, la escena se verá sin sombras ni realismo.
+
+- ¿Qué implica para la GPU que una aplicación tenga múltiples fuentes de iluminación?
+
+Cada fuente de luz agrega más cálculos al fragment shader (dirección, intensidad, color, sombras, etc.).
+Tener muchas luces significa que la GPU debe hacer más operaciones por fragmento, lo que puede disminuir el rendimiento si hay miles de píxeles en pantalla.
+
+### 🧪
+
+- ¿Qué se necesita para dibujar un triángulo en OpenGL?
+
+Para dibujar un triángulo en OpenGL primero se necesita enviar los datos de los vértices a la GPU. Esos datos (las posiciones de los tres puntos del triángulo) se guardan en un VBO (Vertex Buffer Object), que es un objeto que almacena los vértices en la memoria de la tarjeta gráfica.
+
+Luego se crea un VAO (Vertex Array Object), que guarda la configuración de cómo se leen esos datos: por ejemplo, cuántos valores tiene cada vértice y de qué tipo son. El VAO actúa como una especie de “plantilla” que le dice a OpenGL cómo interpretar la información del VBO.
+
+Después de crear y configurar estos objetos, se hace un binding (se activan), y OpenGL ya sabe qué datos usar cuando le pidamos dibujar. Finalmente, se llama la función glDrawArrays(GL_TRIANGLES, 0, 3), que indica que se deben dibujar tres vértices en forma de triángulo.
+
+- ¿Qué se necesita para poder usar un shader en OpenGL?
+
+Para usar un shader en OpenGL moderno hay que crear, compilar y enlazar programas de shader que se ejecutan directamente en la GPU.
+
+Primero se escriben los códigos fuente de los shaders: al menos un vertex shader (para procesar los vértices) y un fragment shader (para calcular el color de los píxeles o fragmentos).
+
+Después, se crean objetos de shader con OpenGL, se les asigna su código fuente y se compilan. Si no hay errores, se linkean ambos dentro de un shader program, que es el objeto final que contiene el pipeline programable.
+
+Una vez el programa está listo, se activa con glUseProgram(shaderProg). A partir de ahí, todos los dibujos que hagamos usarán esos shaders hasta que se desactive o se cambie el programa.
