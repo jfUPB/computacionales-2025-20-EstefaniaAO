@@ -103,7 +103,7 @@ void ofApp::exit() {
 
 Al hacer click pasan algunos segundos y despues cambia el tamaño del circulo. Es lo que se podía esperar, quizá esperaba que sucediera más rapidamente o que aún se freezeara como en la versión anterior pero el funcionamiento como tal es bueno. Creo que se demora porque, como se indica en consola, el hilo se queda unos momentos procesando la información mientras la aplicación sigue funcionando. Al usar distintos hilos para distintas funciones es posible ejecutar calculos más pesados sin que deje de funcionar la aplicación.
 
-~~~
+~~~C++
 void ofApp::threadedFunction() {
 	heavyComputation();
 	std::cout << "Thread ends" << std::endl;
