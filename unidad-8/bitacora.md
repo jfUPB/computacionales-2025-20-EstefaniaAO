@@ -158,3 +158,4 @@ El lock y unlock se hace para implementar el mutual exclusion, por lo que si se 
 
 ### Explica en tus propias palabras ¿Cómo puede presentarse la condición de carrera en este caso? ¿Qué es lo que está pasando? Te pido que propongas un ejemplo.
 
+La condición de carrera es básicamente un error cuando varios hilos intentan acceder a la misma variable en paralelo.
