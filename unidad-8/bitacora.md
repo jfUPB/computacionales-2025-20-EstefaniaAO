@@ -457,3 +457,11 @@ esto es masomenos imitando la del ejemplo:
 Siento que lo más complicado no fue entender los cálculos o la estructura de los hilos, sino integrar la nueva variable juliaK y asegurar que el recálculo se disparara correctamente con el movimiento del mouse. En general, la lógica la comprendí bien, pero a veces me costó aplicarla de forma práctica sin errores.
 
 ## Autoevaluación:
+
+| **Actividad** | **Cumplimiento** | **Descripción** |
+|---------------|-----------------|-----------------|
+| **Actividad 01:** | Completa | Analicé el programa inicial con el círculo y la función `heavyComputation()`. Entendí por qué se congelaba la aplicación al ejecutarlo en un solo hilo y cómo mover la tarea pesada a un hilo independiente mejoró la interacción. Puse ejemplos de código, capturas y describí el comportamiento esperado vs. el real. |
+| **Actividad 02:** | Completa | Identifiqué cómo se protege la variable `circleSize` con `lock()` y `unlock()`. Analicé los efectos de usar o no mutex (`useLock`) y expliqué la condición de carrera con ejemplos prácticos. Documenté cómo el rendimiento se ve afectado por sincronización y cómo se evita corrupción de datos. |
+| **Actividad 03:** | Completa | Realicé experimentos cambiando `maxIterations` y los colores del fractal. Hipoteticé resultados, los verifiqué y expliqué las razones detrás de los cambios observados en detalle. Capturé imágenes y describí cómo los parámetros afectan tanto el rendimiento como la visualización del fractal. |
+| **Actividad 04:** | Completa | Analicé la versión del Flocking con y sin hilos. Identifiqué la estructura principal (`vector<Boid>`) y cómo se sincroniza su acceso con `lock()/unlock()`. Expliqué los problemas que surgen sin sincronización, el impacto de añadir boids y cómo el paralelismo se ve limitado por recursos compartidos. |
+| **Actividad 05:** | Completa | Implementé el conjunto de Julia con hilos reutilizando la estructura de Mandelbrot. Mostré cómo la constante `juliaK` se mapea al mouse y cómo se dispara el recálculo con `mouseDragged()`. Documenté los desafíos al integrar la interacción y capturé fractales resultantes en distintas posiciones del mouse. |
