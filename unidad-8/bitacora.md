@@ -1,5 +1,14 @@
 # Bitácora de aprendizaje de la unidad 8
 
+## **Índice**
+
+- [Actividad 01](#actividad-01)
+- [Actividad 02](#actividad-02)
+- [Actividad 03](#actividad-03)
+- [Actividad 04](#actividad-04)
+- [Actividad 05](#actividad-05)
+- [Autoevaluación](#autoevaluación)
+
 ## Actividad 01:
 
 <img width="1301" height="763" alt="image" src="https://github.com/user-attachments/assets/aa150e94-9fae-44ed-83c2-c4cd9c3e765d" />
@@ -387,3 +396,64 @@ El problema es que ambos hilos estarían usando la misma estructura de boids al 
 La app no se congela porque los hilos siguen corriendo, pero sí puede crashear o dejar el flocking actuando raro. Por eso se necesita un lock cuando se agregan boids. Ese lock pausa momentáneamente el acceso para evitar que ambos hilos toquen los datos al mismo tiempo.
 
 ## Actividad 05:
+
+### Pega la parte clave de tu función modificada que calcula el píxel para el conjunto de Julia.
+~~~
+int calculateJuliaPixel(int x, int y) {
+    float zx = ofMap(x, 0, imgWidth, -2.0, 1.0);
+    float zy = ofMap(y, 0, imgHeight, -1.5, 1.5);
+    int iterations = 0;
+    while (zx * zx + zy * zy < 4.0 && iterations < maxIterations) {
+        float tempX = zx * zx - zy * zy + juliaK.x;
+        zy = 2.0 * zx * zy + juliaK.y;
+        zx = tempX;
+        iterations++;
+    }
+    return iterations;
+}
+~~~
+
+En ofApp.cpp al crear los hilos:
+~~~
+MandelbrotThread* newThread = new MandelbrotThread(startY, endY, imgWidth, imgHeight, maxIterations, pixels, juliaK);
+~~~
+
+### Muestra cómo mapeaste la posición del mouse a la constante k.
+
+Para mapear la posición del mouse puse lo siguiente en update():
+~~~
+juliaK.x = ofMap(mouseX, 0, imgWidth, -1.5f, 1.5f);
+juliaK.y = ofMap(mouseY, 0, imgHeight, -1.5f, 1.5f);
+~~~
+
+Y después creé una función para que la aplicación siguiera el movimiento del mouse:
+~~~
+void ofApp::mouseDragged(int x, int y, int button) {
+    startCalculation();
+}
+~~~
+
+### Describe brevemente cómo reutilizaste la estructura de hilos de la versión Mandelbrot. ¿Tuviste que cambiar mucho esa parte?
+
+La verdad no tuve que realizar casi cambios en esta estructura. La lógica de lanzar y esperar los hilos quedó igual, solo agregué una variable nueva en la parte de los cálculos, que es el vector que almacena los valores de la constante k para Julia. Por lo demás, la estructura se pudo reutilizar completamente sin problema.
+
+### ¿Cómo te aseguraste de que la imagen se recalculara cuando el mouse se movía?
+
+Básicamente, cada vez que el mouse cambia de posición, se actualiza la constante juliaK con las coordenadas mapeadas. Luego, al arrastrar el mouse (mouseDragged) se llama a startCalculation(), disparando un recálculo completo de todos los píxeles en paralelo. Así la imagen siempre refleja el valor actualizado de k.
+
+### Incluye al menos dos capturas de pantalla que muestren diferentes fractales de Julia generados al mover el mouse en tu aplicación.
+
+<img width="1017" height="753" alt="image" src="https://github.com/user-attachments/assets/2d91b721-761c-42cd-ad28-beedeeea2475" />
+<img width="1008" height="755" alt="image" src="https://github.com/user-attachments/assets/5e4e21f5-cc91-4afa-878e-f10363855ec3" />
+
+esto es masomenos imitando la del ejemplo:
+
+<img width="1010" height="742" alt="image" src="https://github.com/user-attachments/assets/2aa4618b-0d61-46bd-9f6c-5401d95f95e9" />
+<img width="1013" height="796" alt="image" src="https://github.com/user-attachments/assets/4a9498e6-fd54-433f-a12b-286a92bca8cf" />
+
+
+### ¿Encontraste algún desafío particular al implementar la interacción o modificar el cálculo?
+
+Siento que lo más complicado no fue entender los cálculos o la estructura de los hilos, sino integrar la nueva variable juliaK y asegurar que el recálculo se disparara correctamente con el movimiento del mouse. En general, la lógica la comprendí bien, pero a veces me costó aplicarla de forma práctica sin errores.
+
+## Autoevaluación:
