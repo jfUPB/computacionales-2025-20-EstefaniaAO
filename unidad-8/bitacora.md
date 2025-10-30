@@ -445,6 +445,7 @@ Básicamente, cada vez que el mouse cambia de posición, se actualiza la constan
 
 <img width="1017" height="753" alt="image" src="https://github.com/user-attachments/assets/2d91b721-761c-42cd-ad28-beedeeea2475" />
 <img width="1008" height="755" alt="image" src="https://github.com/user-attachments/assets/5e4e21f5-cc91-4afa-878e-f10363855ec3" />
+<img width="1007" height="742" alt="image" src="https://github.com/user-attachments/assets/74bf0ff5-c2ea-4699-a053-e8c306a12118" />
 
 esto es masomenos imitando la del ejemplo:
 
